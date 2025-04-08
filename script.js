@@ -13,66 +13,28 @@ function openTab(evt, tabName) {
   evt.currentTarget.className += " active";
 }
 
+const gymExercises = {
+  "Fullbody": ["Bench Press", "Incline Bench Press", "Barbell Pullover", "Back Rows", "Upper Back Row", "Military Press", "Wide Grip Upright Rows", "Bicep Curls", "Drag Curls", "Spider Curls", "Hammer Curls", "Preacher Curls", "Skull Crushers", "Overhead Tricep Extensions", "Close Grip Barbell Press", "Squats", "Split Squats", "Bulgarian Split Squats", "B-Stance Squats", "Reverse Lunges", "Lunges", "Deadlifts", "Romanian Deadlifts", "Straight Leg Deadlifts", "Sumo Deadlifts", "Trap Bar Deadlifts", "Hip Thrusts"],
+  "Upper": ["Bench Press", "Incline Bench Press", "Barbell Pullover", "Back Rows", "Upper Back Row", "Military Press", "Wide Grip Upright Rows", "Bicep Curls", "Drag Curls", "Spider Curls", "Hammer Curls", "Preacher Curls", "Skull Crushers", "Overhead Tricep Extensions", "Close Grip Barbell Press"],
+  "Lower": ["Squats", "Split Squats", "Bulgarian Split Squats", "B-Stance Squats", "Reverse Lunges", "Lunges", "Deadlifts", "Romanian Deadlifts", "Straight Leg Deadlifts", "Sumo Deadlifts", "Trap Bar Deadlifts", "Hip Thrusts"],
+  "Push": ["Bench Press", "Incline Bench Press", "Barbell Pullover", "Military Press", "Wide Grip Upright Rows", "Skull Crushers", "Overhead Tricep Extensions", "Close Grip Barbell Press"],
+  "Pull": ["Back Rows", "Upper Back Row", "Bicep Curls", "Drag Curls", "Spider Curls", "Hammer Curls", "Preacher Curls"],
+  "Squats": ["Squats", "Split Squats", "Bulgarian Split Squats", "B-Stance Squats", "Reverse Lunges", "Lunges"],
+  "Hinge": ["Deadlifts", "Romanian Deadlifts", "Straight Leg Deadlifts", "Sumo Deadlifts", "Trap Bar Deadlifts", "Hip Thrusts"]
+};
+
+const homeExercises = {
+  "Fullbody": ["Push-ups", "Decline Push Ups", "Medicine Ball Push Ups", "Chest Dips", "Pull-ups", "Dips", "Polar Press", "Crocodile Push Ups", "Squats", "Lunges", "Reverse Lunges", "Frog Squats", "Hamstring Walkbacks"],
+  "Upper": ["Push-ups", "Decline Push Ups", "Medicine Ball Push Ups", "Chest Dips", "Pull-ups", "Dips", "Polar Press", "Crocodile Push Ups"],
+  "Lower": ["Squats", "Lunges", "Reverse Lunges", "Frog Squats", "Hamstring Walkbacks"],
+  "Push": ["Push-ups", "Decline Push Ups", "Medicine Ball Push Ups", "Chest Dips", "Dips", "Polar Press", "Crocodile Push Ups"],
+  "Pull": ["Pull-ups"],
+  "Squats": ["Squats", "Lunges", "Reverse Lunges", "Frog Squats"],
+  "Hinge": ["Hamstring Walkbacks"]
+};
+
 const gymEquipment = ["Barbells", "Dumbbells", "Cables", "Weight Machines", "Resistance Bands", "Bodyweight", "Kettlebells"];
 const homeEquipment = ["Bodyweight", "Resistance Bands"];
-
-const allExercises = {
-  "Squats": {
-    "gym": ["Squats", "B-Stance Squats", "Bulgarian Split Squats", "Reverse Lunges"],
-    "home": ["Squats", "Reverse Lunges", "Frog Squats"]
-  },
-  "Hinge": {
-    "gym": ["Deadlifts", "Romanian Deadlifts", "Straight Leg Deadlifts", "Trap Bar Deadlifts"],
-    "home": ["Hamstring Walkbacks"]
-  },
-  "Push": {
-    "gym": ["Bench Press", "Incline Bench Press", "Military Press", "Overhead Tricep Extensions"],
-    "home": ["Push-ups", "Chest Dips", "Medicine Ball Push Ups"]
-  },
-  "Pull": {
-    "gym": ["Back Rows", "Upper Back Row", "Bicep Curls", "Hammer Curls"],
-    "home": ["Pull-ups"]
-  },
-  "Fullbody": {
-    "gym": ["Squats", "Deadlifts", "Bench Press", "Military Press"],
-    "home": ["Push-ups", "Pull-ups", "Squats"]
-  },
-  "Upper": {
-    "gym": ["Bench Press", "Incline Bench Press", "Military Press", "Back Rows", "Bicep Curls"],
-    "home": ["Push-ups", "Pull-ups", "Dips"]
-  },
-  "Lower": {
-    "gym": ["Squats", "Deadlifts", "Bulgarian Split Squats"],
-    "home": ["Squats", "Lunges", "Hamstring Walkbacks"]
-  }
-};
-
-const exerciseEquipmentMap = {
-  "Squats": ["Barbells", "Dumbbells", "Bodyweight", "Resistance Bands"],
-  "B-Stance Squats": ["Dumbbells", "Resistance Bands"],
-  "Bulgarian Split Squats": ["Dumbbells", "Bodyweight"],
-  "Reverse Lunges": ["Dumbbells", "Bodyweight", "Resistance Bands"],
-  "Deadlifts": ["Barbells", "Dumbbells", "Resistance Bands"],
-  "Romanian Deadlifts": ["Barbells", "Dumbbells", "Resistance Bands"],
-  "Straight Leg Deadlifts": ["Barbells", "Dumbbells"],
-  "Trap Bar Deadlifts": ["Trap Bar"],
-  "Hamstring Walkbacks": ["Bodyweight"],
-  "Bench Press": ["Barbells", "Weight Machines"],
-  "Incline Bench Press": ["Barbells"],
-  "Military Press": ["Barbells", "Dumbbells"],
-  "Overhead Tricep Extensions": ["Dumbbells", "Resistance Bands"],
-  "Back Rows": ["Barbells", "Dumbbells", "Cables"],
-  "Upper Back Row": ["Cables"],
-  "Bicep Curls": ["Dumbbells", "Cables", "Resistance Bands"],
-  "Hammer Curls": ["Dumbbells"],
-  "Push-ups": ["Bodyweight"],
-  "Chest Dips": ["Bodyweight"],
-  "Medicine Ball Push Ups": ["Bodyweight"],
-  "Pull-ups": ["Bodyweight"],
-  "Dips": ["Bodyweight"],
-  "Lunges": ["Bodyweight", "Dumbbells"],
-  "Frog Squats": ["Bodyweight"]
-};
 
 function populateEquipmentDropdown() {
   const location = document.getElementById("location").value;
@@ -87,7 +49,7 @@ function populateEquipmentDropdown() {
     equipmentDropdown.appendChild(option);
   });
 
-  populateExerciseDropdown(); // re-run if needed
+  populateExerciseDropdown(); // refresh exercises if needed
 }
 
 function populateExerciseDropdown() {
@@ -100,14 +62,9 @@ function populateExerciseDropdown() {
 
   if (!location || !focus || !equipment) return;
 
-  const baseExercises = allExercises[focus]?.[location] || [];
+  const exerciseOptions = location === "gym" ? gymExercises[focus] : homeExercises[focus];
 
-  const filtered = baseExercises.filter(exercise => {
-    const validEquip = exerciseEquipmentMap[exercise];
-    return validEquip && validEquip.includes(equipment);
-  });
-
-  filtered.forEach(exercise => {
+  exerciseOptions.forEach(exercise => {
     const option = document.createElement("option");
     option.value = exercise;
     option.textContent = exercise;
