@@ -30,7 +30,8 @@ const homeExercises = {
   "Push": ["Push-ups", "Decline Push Ups", "Medicine Ball Push Ups", "Chest Dips", "Dips", "Polar Press", "Crocodile Push Ups"],
   "Pull": ["Pull-ups"],
   "Squats": ["Squats", "Lunges", "Reverse Lunges", "Frog Squats"],
-  "Hinge": ["Hamstring Walkbacks"]
+  "Hinge": ["Hamstring Walkbacks"],
+  "Core": ["Standing Twists", "Heel Taps", "Crunches", "V sit", "Hand Walk Outs", "Reverse Crunches"]
 };
 
 const gymEquipment = ["Barbells", "Dumbbells", "Cables", "Weight Machines", "Resistance Bands", "Bodyweight", "Kettlebells"];
