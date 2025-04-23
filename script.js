@@ -37,7 +37,7 @@ const homeExercises = {
 const gymEquipment = ["Barbells", "Dumbbells", "Cables", "Weight Machines", "Resistance Bands", "Bodyweight", "Kettlebells"];
 const homeEquipment = ["Bodyweight", "Resistance Bands"];
 
-const bestWeights = {}; // key: exercise, value: best weight
+const bestWeights = {}; // Store best weight per exercise
 
 function populateEquipmentDropdown() {
   const location = document.getElementById("location").value;
@@ -52,54 +52,49 @@ function populateEquipmentDropdown() {
     equipmentDropdown.appendChild(option);
   });
 
-  populateExerciseDropdown();
+  populateExerciseDropdown(); // refresh exercises
 }
 
 function populateExerciseDropdown() {
   const location = document.getElementById("location").value;
   const focus = document.getElementById("focus").value;
-  const equipment = document.getElementById("equipmentDropdown").value;
   const exerciseDropdown = document.getElementById("exerciseDropdown");
-  const bestWeightSpan = document.querySelector(".best-weight");
 
   exerciseDropdown.innerHTML = "<option value='' disabled selected>Select an Exercise</option>";
-  bestWeightSpan.textContent = "";
 
-  if (!location || !focus || !equipment) return;
+  if (!location || !focus) return;
 
   const exerciseOptions = location === "gym" ? gymExercises[focus] : homeExercises[focus];
-
   exerciseOptions.forEach(exercise => {
     const option = document.createElement("option");
     option.value = exercise;
     option.textContent = exercise;
     exerciseDropdown.appendChild(option);
   });
-
-  exerciseDropdown.onchange = function () {
-    const selectedExercise = this.value;
-    const best = bestWeights[selectedExercise];
-    bestWeightSpan.textContent = best ? best + " kg" : "N/A";
-  };
 }
+
+document.getElementById("exerciseDropdown").addEventListener("change", function () {
+  const selected = this.value;
+  const best = bestWeights[selected];
+  document.querySelector(".best-weight").textContent = best ? best : "-";
+});
 
 function saveData() {
   const equipment = document.getElementById("equipmentDropdown").value;
   const exercise = document.getElementById("exerciseDropdown").value;
   const sets = 3;
   const reps = 10;
-  const weight = parseFloat(document.querySelector(".exercise-weight").value);
+  const weight = document.querySelector(".exercise-weight").value;
   const focus = document.getElementById("focus").value;
 
-  if (!equipment || !exercise || isNaN(weight)) {
+  if (!equipment || !exercise || !weight) {
     alert("Please fill in all the fields.");
     return;
   }
 
-  const bestWeightSpan = document.querySelector(".best-weight");
-  if (!bestWeights[exercise] || weight > bestWeights[exercise]) {
+  // Store best weight
+  if (!bestWeights[exercise] || parseFloat(weight) > parseFloat(bestWeights[exercise])) {
     bestWeights[exercise] = weight;
-    bestWeightSpan.textContent = weight + " kg";
   }
 
   const tableBody = focus === "Upper" ? document.querySelector("#upperBodyTable tbody") : document.querySelector("#lowerBodyTable tbody");
@@ -120,10 +115,47 @@ function saveData() {
   };
   clearCell.appendChild(clearButton);
 
+  // Reset inputs
   document.getElementById("equipmentDropdown").value = "";
   document.getElementById("exerciseDropdown").value = "";
   document.querySelector(".exercise-weight").value = "";
-  bestWeightSpan.textContent = "";
+  document.querySelector(".best-weight").textContent = "-";
+}
+
+function addCustomExercise() {
+  const customInput = document.getElementById("customExerciseInput").value.trim();
+  if (!customInput) return;
+
+  const exerciseDropdown = document.getElementById("exerciseDropdown");
+  const option = document.createElement("option");
+  option.value = customInput;
+  option.textContent = customInput;
+  exerciseDropdown.appendChild(option);
+  exerciseDropdown.value = customInput;
+
+  document.getElementById("customExerciseInput").value = "";
+}
+
+function toggleDarkMode() {
+  document.body.classList.toggle("dark-mode");
+}
+
+let restInterval;
+function startRestTimer() {
+  const restTime = 60; // seconds
+  let timeLeft = restTime;
+  const timerDisplay = document.getElementById("restTimer");
+  timerDisplay.textContent = `Rest: ${timeLeft}s`;
+
+  clearInterval(restInterval);
+  restInterval = setInterval(() => {
+    timeLeft--;
+    timerDisplay.textContent = `Rest: ${timeLeft}s`;
+    if (timeLeft <= 0) {
+      clearInterval(restInterval);
+      timerDisplay.textContent = "Rest complete!";
+    }
+  }, 1000);
 }
 
 document.getElementById("defaultOpen").click();
