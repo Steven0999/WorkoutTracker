@@ -3,110 +3,110 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Workout Tracker</title>
-  <link rel="stylesheet" href="styles.css"/>
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
 
-  <div class="tab">
-    <button class="tablinks" onclick="openTab(event, 'WorkoutInput')" id="defaultOpen">Workout Input</button>
-    <button class="tablinks" onclick="openTab(event, 'UpperLowerTables')">Upper & Lower Workout Tables</button>
+<div class="tab">
+  <button class="tablinks" onclick="openTab(event, 'WorkoutInput')" id="defaultOpen">Workout Input</button>
+  <button class="tablinks" onclick="openTab(event, 'UpperLowerTables')">Upper & Lower Workout Tables</button>
+</div>
+
+<div id="WorkoutInput" class="tabcontent">
+  <h1>Workout Tracker - Input</h1>
+
+  <div>
+    <label for="location">Location:</label>
+    <select id="location" onchange="populateEquipmentDropdown()">
+      <option value="" disabled selected>Select Location</option>
+      <option value="gym">Gym</option>
+      <option value="home">Home</option>
+    </select>
   </div>
 
-  <div id="WorkoutInput" class="tabcontent">
-    <h1>Workout Tracker - Input</h1>
-
-    <div>
-      <label for="location">Location:</label>
-      <select id="location" onchange="populateEquipmentDropdown()">
-        <option value="" disabled selected>Select Location</option>
-        <option value="gym">Gym</option>
-        <option value="home">Home</option>
-      </select>
-    </div>
-
-    <div>
-      <label for="focus">Focus:</label>
-      <select id="focus" onchange="populateExerciseDropdown()">
-        <option value="" disabled selected>Select Focus</option>
-        <option value="Fullbody">Fullbody</option>
-        <option value="Upper">Upper Body</option>
-        <option value="Lower">Lower Body</option>
-        <option value="Push">Push</option>
-        <option value="Pull">Pull</option>
-        <option value="Squats">Squats</option>
-        <option value="Hinge">Hinge</option>
-        <option value="Core">Core</option>
-      </select>
-    </div>
-
-    <table id="workoutTable">
-      <thead>
-        <tr>
-          <th>Equipment</th>
-          <th>Exercise</th>
-          <th>Sets</th>
-          <th>Reps</th>
-          <th>Best Weight (kg)</th>
-          <th>Weight (kg)</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td>
-            <select id="equipmentDropdown" onchange="populateExerciseDropdown()">
-              <option value="" disabled selected>Select Equipment</option>
-            </select>
-          </td>
-          <td>
-            <select id="exerciseDropdown" onchange="updateBestWeightDisplay()">
-              <option value="" disabled selected>Select an Exercise</option>
-            </select>
-          </td>
-          <td>3</td>
-          <td>10</td>
-          <td><span class="best-weight"></span></td>
-          <td><input type="number" class="exercise-weight"/></td>
-        </tr>
-      </tbody>
-    </table>
-
-    <button class="submit-button" onclick="saveData()">Submit</button>
+  <div>
+    <label for="focus">Focus:</label>
+    <select id="focus" onchange="populateExerciseDropdown()">
+      <option value="" disabled selected>Select Focus</option>
+      <option value="Fullbody">Fullbody</option>
+      <option value="Upper">Upper Body</option>
+      <option value="Lower">Lower Body</option>
+      <option value="Push">Push</option>
+      <option value="Pull">Pull</option>
+      <option value="Squats">Squats</option>
+      <option value="Hinge">Hinge</option>
+      <option value="Core">Core</option>
+    </select>
   </div>
 
-  <div id="UpperLowerTables" class="tabcontent">
-    <h1>Workout Tracker - Upper & Lower Workout Tables</h1>
+  <table id="workoutTable">
+    <thead>
+    <tr>
+      <th>Equipment</th>
+      <th>Exercise</th>
+      <th>Sets</th>
+      <th>Reps</th>
+      <th>Best Weight (kg)</th>
+      <th>Weight (kg)</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr>
+      <td>
+        <select id="equipmentDropdown" onchange="populateExerciseDropdown()">
+          <option value="" disabled selected>Select Equipment</option>
+        </select>
+      </td>
+      <td>
+        <select id="exerciseDropdown" onchange="updateBestWeightDisplay()">
+          <option value="" disabled selected>Select an Exercise</option>
+        </select>
+      </td>
+      <td>3</td>
+      <td>10</td>
+      <td><span class="best-weight"></span></td>
+      <td><input type="number" class="exercise-weight"/></td>
+    </tr>
+    </tbody>
+  </table>
 
-    <h2>Upper Body Exercises</h2>
-    <table id="upperBodyTable">
-      <thead>
-        <tr>
-          <th>Equipment</th>
-          <th>Exercise</th>
-          <th>Sets</th>
-          <th>Reps</th>
-          <th>Weight (kg)</th>
-          <th>Clear</th>
-        </tr>
-      </thead>
-      <tbody></tbody>
-    </table>
+  <button class="submit-button" onclick="saveData()">Submit</button>
+</div>
 
-    <h2>Lower Body Exercises</h2>
-    <table id="lowerBodyTable">
-      <thead>
-        <tr>
-          <th>Equipment</th>
-          <th>Exercise</th>
-          <th>Sets</th>
-          <th>Reps</th>
-          <th>Weight (kg)</th>
-          <th>Clear</th>
-        </tr>
-      </thead>
-      <tbody></tbody>
-    </table>
-  </div>
+<div id="UpperLowerTables" class="tabcontent">
+  <h1>Workout Tracker - Upper & Lower Workout Tables</h1>
 
-  <script src="script.js"></script>
+  <h2>Upper Body Exercises</h2>
+  <table id="upperBodyTable">
+    <thead>
+    <tr>
+      <th>Equipment</th>
+      <th>Exercise</th>
+      <th>Sets</th>
+      <th>Reps</th>
+      <th>Weight (kg)</th>
+      <th>Clear</th>
+    </tr>
+    </thead>
+    <tbody></tbody>
+  </table>
+
+  <h2>Lower Body Exercises</h2>
+  <table id="lowerBodyTable">
+    <thead>
+    <tr>
+      <th>Equipment</th>
+      <th>Exercise</th>
+      <th>Sets</th>
+      <th>Reps</th>
+      <th>Weight (kg)</th>
+      <th>Clear</th>
+    </tr>
+    </thead>
+    <tbody></tbody>
+  </table>
+</div>
+
+<script src="script.js"></script>
 </body>
 </html>
