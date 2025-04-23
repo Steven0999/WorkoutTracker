@@ -36,10 +36,6 @@ body {
   border-top: none;
 }
 
-.tabcontent.active {
-  display: block;
-}
-
 table {
   border-collapse: collapse;
   width: 100%;
@@ -54,7 +50,8 @@ th, td {
 }
 
 th {
-  background-color: #333;
+  background-color: #f2f2f2;
+  color: black;
 }
 
 .submit-button,
@@ -64,13 +61,6 @@ th {
   border: none;
   padding: 6px 10px;
   text-align: center;
-  text-decoration: none;
-  display: inline-block;
   cursor: pointer;
   border-radius: 4px;
-}
-
-.submit-button:hover,
-.clear-button:hover {
-  background-color: #ddd;
 }
