@@ -1,7 +1,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Workout Tracker</title>
   <link rel="stylesheet" href="styles.css" />
 </head>
@@ -58,13 +58,13 @@
             </select>
           </td>
           <td>
-            <select id="exerciseDropdown">
+            <select id="exerciseDropdown" onchange="updateBestWeightDisplay()">
               <option value="" disabled selected>Select an Exercise</option>
             </select>
           </td>
           <td>3</td>
           <td>10</td>
-          <td><span class="best-weight"></span></td>
+          <td><span class="best-weight">-</span></td>
           <td><input type="number" class="exercise-weight" /></td>
         </tr>
       </tbody>
