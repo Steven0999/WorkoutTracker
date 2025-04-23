@@ -14,24 +14,24 @@ function openTab(evt, tabName) {
 }
 
 const gymExercises = {
-  "Fullbody": ["Bench Press", "Incline Bench Press", "Barbell Pullover", "Back Rows", "Upper Back Row", "Military Press", "Wide Grip Upright Rows", "Bicep Curls", "Drag Curls", "Spider Curls", "Hammer Curls", "Preacher Curls", "Skull Crushers", "Overhead Tricep Extensions", "Close Grip Barbell Press", "Squats", "Split Squats", "Bulgarian Split Squats", "B-Stance Squats", "Reverse Lunges", "Lunges", "Deadlifts", "Romanian Deadlifts", "Straight Leg Deadlifts", "Sumo Deadlifts", "Trap Bar Deadlifts", "Hip Thrusts"],
-  "Upper": ["Bench Press", "Incline Bench Press", "Barbell Pullover", "Back Rows", "Upper Back Row", "Military Press", "Wide Grip Upright Rows", "Bicep Curls", "Drag Curls", "Spider Curls", "Hammer Curls", "Preacher Curls", "Skull Crushers", "Overhead Tricep Extensions", "Close Grip Barbell Press"],
-  "Lower": ["Squats", "Split Squats", "Bulgarian Split Squats", "B-Stance Squats", "Reverse Lunges", "Lunges", "Deadlifts", "Romanian Deadlifts", "Straight Leg Deadlifts", "Sumo Deadlifts", "Trap Bar Deadlifts", "Hip Thrusts"],
-  "Push": ["Bench Press", "Incline Bench Press", "Barbell Pullover", "Military Press", "Wide Grip Upright Rows", "Skull Crushers", "Overhead Tricep Extensions", "Close Grip Barbell Press"],
-  "Pull": ["Back Rows", "Upper Back Row", "Bicep Curls", "Drag Curls", "Spider Curls", "Hammer Curls", "Preacher Curls"],
-  "Squats": ["Squats", "Split Squats", "Bulgarian Split Squats", "B-Stance Squats", "Reverse Lunges", "Lunges"],
-  "Hinge": ["Deadlifts", "Romanian Deadlifts", "Straight Leg Deadlifts", "Sumo Deadlifts", "Trap Bar Deadlifts", "Hip Thrusts"]
+  "Fullbody": [...],
+  "Upper": [...],
+  "Lower": [...],
+  "Push": [...],
+  "Pull": [...],
+  "Squats": [...],
+  "Hinge": [...]
 };
 
 const homeExercises = {
-  "Fullbody": ["Push-ups", "Decline Push Ups", "Medicine Ball Push Ups", "Chest Dips", "Pull-ups", "Dips", "Polar Press", "Crocodile Push Ups", "Squats", "Lunges", "Reverse Lunges", "Frog Squats", "Hamstring Walkbacks"],
-  "Upper": ["Push-ups", "Decline Push Ups", "Medicine Ball Push Ups", "Chest Dips", "Pull-ups", "Dips", "Polar Press", "Crocodile Push Ups"],
-  "Lower": ["Squats", "Lunges", "Reverse Lunges", "Frog Squats", "Hamstring Walkbacks"],
-  "Push": ["Push-ups", "Decline Push Ups", "Medicine Ball Push Ups", "Chest Dips", "Dips", "Polar Press", "Crocodile Push Ups"],
-  "Pull": ["Pull-ups"],
-  "Squats": ["Squats", "Lunges", "Reverse Lunges", "Frog Squats"],
-  "Hinge": ["Hamstring Walkbacks"],
-  "Core": ["Standing Twists", "Heel Taps", "Crunches", "V sit", "Hand Walk Outs", "Reverse Crunches"]
+  "Fullbody": [...],
+  "Upper": [...],
+  "Lower": [...],
+  "Push": [...],
+  "Pull": [...],
+  "Squats": [...],
+  "Hinge": [...],
+  "Core": [...]
 };
 
 const gymEquipment = ["Barbells", "Dumbbells", "Cables", "Weight Machines", "Resistance Bands", "Bodyweight", "Kettlebells"];
@@ -50,7 +50,7 @@ function populateEquipmentDropdown() {
     equipmentDropdown.appendChild(option);
   });
 
-  populateExerciseDropdown(); // refresh exercises if needed
+  populateExerciseDropdown();
 }
 
 function populateExerciseDropdown() {
@@ -64,6 +64,7 @@ function populateExerciseDropdown() {
   if (!location || !focus || !equipment) return;
 
   const exerciseOptions = location === "gym" ? gymExercises[focus] : homeExercises[focus];
+  if (!exerciseOptions) return;
 
   exerciseOptions.forEach(exercise => {
     const option = document.createElement("option");
@@ -71,6 +72,17 @@ function populateExerciseDropdown() {
     option.textContent = exercise;
     exerciseDropdown.appendChild(option);
   });
+
+  updateBestWeightDisplay();
+}
+
+function updateBestWeightDisplay() {
+  const equipment = document.getElementById("equipmentDropdown").value;
+  const exercise = document.getElementById("exerciseDropdown").value;
+  const bestWeightSpan = document.querySelector(".best-weight");
+
+  const key = `${exercise}-${equipment}`;
+  bestWeightSpan.textContent = localStorage.getItem(key) || "-";
 }
 
 function saveData() {
@@ -86,7 +98,23 @@ function saveData() {
     return;
   }
 
-  const tableBody = focus === "Upper" ? document.querySelector("#upperBodyTable tbody") : document.querySelector("#lowerBodyTable tbody");
+  const key = `${exercise}-${equipment}`;
+  const previousBest = localStorage.getItem(key);
+  if (!previousBest || parseFloat(weight) > parseFloat(previousBest)) {
+    localStorage.setItem(key, weight);
+  }
+
+  updateBestWeightDisplay();
+
+  let tableBody;
+  if (["Upper", "Push", "Pull"].includes(focus)) {
+    tableBody = document.querySelector("#upperBodyTable tbody");
+  } else if (["Lower", "Squats", "Hinge"].includes(focus)) {
+    tableBody = document.querySelector("#lowerBodyTable tbody");
+  } else {
+    alert("This focus type doesn't have a destination table.");
+    return;
+  }
 
   const row = tableBody.insertRow();
   row.insertCell(0).textContent = equipment;
@@ -107,6 +135,7 @@ function saveData() {
   document.getElementById("equipmentDropdown").value = "";
   document.getElementById("exerciseDropdown").value = "";
   document.querySelector(".exercise-weight").value = "";
+  document.querySelector(".best-weight").textContent = "-";
 }
 
 document.getElementById("defaultOpen").click();
