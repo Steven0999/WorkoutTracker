@@ -54,7 +54,7 @@ th, td {
 }
 
 th {
-  background-color: #f2f2f2;
+  background-color: #333;
 }
 
 .submit-button,
@@ -68,4 +68,9 @@ th {
   display: inline-block;
   cursor: pointer;
   border-radius: 4px;
+}
+
+.submit-button:hover,
+.clear-button:hover {
+  background-color: #ddd;
 }
