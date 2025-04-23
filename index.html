@@ -1,141 +1,100 @@
 <html lang="en">
-  <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<head>
+  <meta charset="UTF-8">
   <title>Workout Tracker</title>
-  <link rel="stylesheet" href="styles.css" />
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <link rel="stylesheet" href="styles.css">
 </head>
 <body>
+  <button onclick="toggleDarkMode()">Toggle Dark Mode</button>
+
   <div class="tab">
     <button class="tablinks" onclick="openTab(event, 'WorkoutInput')" id="defaultOpen">Workout Input</button>
-    <button class="tablinks" onclick="openTab(event, 'UpperLowerTables')">Upper & Lower Workout Tables</button>
-  </div>  <div id="WorkoutInput" class="tabcontent">
-    <h1>Workout Tracker - Input</h1><div>
-  <label for="location">Location:</label>
-  <select id="location" onchange="populateEquipmentDropdown()">
-    <option value="" disabled selected>Select Location</option>
-    <option value="gym">Gym</option>
-    <option value="home">Home</option>
-  </select>
-</div>
+    <button class="tablinks" onclick="openTab(event, 'UpperBody')">Upper Body Log</button>
+    <button class="tablinks" onclick="openTab(event, 'LowerBody')">Lower Body Log</button>
+  </div>
 
-<div>
-  <label for="focus">Focus:</label>
-  <select id="focus" onchange="populateExerciseDropdown()">
-    <option value="" disabled selected>Select Focus</option>
-    <option value="Fullbody">Fullbody</option>
-    <option value="Upper">Upper Body</option>
-    <option value="Lower">Lower Body</option>
-    <option value="Push">Push</option>
-    <option value="Pull">Pull</option>
-    <option value="Squats">Squats</option>
-    <option value="Hinge">Hinge</option>
-    <option value="Core">Core</option>
-  </select>
-</div>
+  <div id="WorkoutInput" class="tabcontent">
+    <h2>Workout Input</h2>
+    
+    <label for="location">Location:</label>
+    <select id="location" onchange="populateEquipmentDropdown()">
+      <option value="" disabled selected>Select Location</option>
+      <option value="gym">Gym</option>
+      <option value="home">Home</option>
+    </select>
 
-<table id="workoutTable">
-  <thead>
-    <tr>
-      <th>Equipment</th>
-      <th>Exercise</th>
-      <th>Sets</th>
-      <th>Reps</th>
-      <th>Best Weight (kg)</th>
-      <th>Weight (kg)</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td>
-        <select id="equipmentDropdown" onchange="populateExerciseDropdown()">
-          <option value="" disabled selected>Select Equipment</option>
-        </select>
-      </td>
-      <td>
-        <select id="exerciseDropdown" onchange="updateBestWeight()">
-          <option value="" disabled selected>Select an Exercise</option>
-        </select>
-      </td>
-      <td>3</td>
-      <td>10</td>
-      <td><span class="best-weight">0</span></td>
-      <td><input type="number" class="exercise-weight" /></td>
-    </tr>
-  </tbody>
-</table>
-
-<button class="submit-button" onclick="saveData()">Submit</button>
-
-<!-- New Features -->
-<h2>New Features</h2>
-
-<!-- Dark Mode Toggle -->
-<label class="switch">
-  <input type="checkbox" id="darkModeToggle" onchange="toggleDarkMode()">
-  <span class="slider round"></span> Dark Mode
-</label>
-
-<!-- Custom Exercise Modal -->
-<button onclick="openCustomExerciseModal()">Add Custom Exercise</button>
-<div id="customExerciseModal" class="modal">
-  <div class="modal-content">
-    <span class="close" onclick="closeCustomExerciseModal()">&times;</span>
-    <h2>Add Custom Exercise</h2>
-    <input type="text" id="customExerciseName" placeholder="Exercise Name">
-    <select id="customExerciseFocus">
+    <label for="focus">Workout Focus:</label>
+    <select id="focus" onchange="populateExerciseDropdown()">
+      <option value="" disabled selected>Select Focus</option>
+      <option value="Fullbody">Fullbody</option>
       <option value="Upper">Upper</option>
       <option value="Lower">Lower</option>
-      <option value="Fullbody">Fullbody</option>
+      <option value="Push">Push</option>
+      <option value="Pull">Pull</option>
+      <option value="Squats">Squats</option>
+      <option value="Hinge">Hinge</option>
+      <option value="Core">Core</option>
     </select>
-    <button onclick="addCustomExercise()">Add Exercise</button>
+
+    <label for="equipmentDropdown">Equipment:</label>
+    <select id="equipmentDropdown" onchange="populateExerciseDropdown()"></select>
+
+    <label for="exerciseDropdown">Exercise:</label>
+    <select id="exerciseDropdown"></select>
+
+    <div>
+      <label>Best Weight (kg):</label>
+      <span class="best-weight">-</span>
+    </div>
+
+    <label for="weight">Weight (kg):</label>
+    <input type="number" class="exercise-weight" placeholder="Enter weight">
+
+    <button class="submit-button" onclick="saveData()">Submit</button>
+
+    <h3>Add Custom Exercise</h3>
+    <input type="text" id="customExerciseInput" placeholder="Enter custom exercise">
+    <button onclick="addCustomExercise()">Add</button>
+
+    <h3>Rest Timer</h3>
+    <button onclick="startRestTimer()">Start Rest</button>
+    <div id="restTimer">Rest: --</div>
   </div>
-</div>
 
-<!-- Timer -->
-<div id="timer">
-  <span id="timeDisplay">00:00</span>
-  <button onclick="startTimer()">Start</button>
-  <button onclick="resetTimer()">Reset</button>
-</div>
+  <div id="UpperBody" class="tabcontent">
+    <h2>Upper Body Workout Log</h2>
+    <table id="upperBodyTable">
+      <thead>
+        <tr>
+          <th>Equipment</th>
+          <th>Exercise</th>
+          <th>Sets</th>
+          <th>Reps</th>
+          <th>Weight</th>
+          <th>Clear</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+  </div>
 
-<!-- Progress Chart -->
-<canvas id="progressChart" width="400" height="200"></canvas>
+  <div id="LowerBody" class="tabcontent">
+    <h2>Lower Body Workout Log</h2>
+    <table id="lowerBodyTable">
+      <thead>
+        <tr>
+          <th>Equipment</th>
+          <th>Exercise</th>
+          <th>Sets</th>
+          <th>Reps</th>
+          <th>Weight</th>
+          <th>Clear</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+  </div>
 
-<!-- Streak Counter -->
-<div id="streak">Current Streak: <span id="streakCount">0</span> days</div>
-
-  </div>  <div id="UpperLowerTables" class="tabcontent">
-    <h1>Workout Tracker - Upper & Lower Workout Tables</h1><h2>Upper Body Exercises</h2>
-<table id="upperBodyTable">
-  <thead>
-    <tr>
-      <th>Equipment</th>
-      <th>Exercise</th>
-      <th>Sets</th>
-      <th>Reps</th>
-      <th>Weight (kg)</th>
-      <th>Clear</th>
-    </tr>
-  </thead>
-  <tbody></tbody>
-</table>
-
-<h2>Lower Body Exercises</h2>
-<table id="lowerBodyTable">
-  <thead>
-    <tr>
-      <th>Equipment</th>
-      <th>Exercise</th>
-      <th>Sets</th>
-      <th>Reps</th>
-      <th>Weight (kg)</th>
-      <th>Clear</th>
-    </tr>
-  </thead>
-  <tbody></tbody>
-</table>
-
-  </div>  <script src="script.js"></script></body>
+  <script src="script.js"></script>
+</body>
 </html>
