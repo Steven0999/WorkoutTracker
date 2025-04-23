@@ -13,12 +13,31 @@ function openTab(evt, tabName) {
   evt.currentTarget.className += " active";
 }
 
-const bestWeights = {};
+const gymExercises = {
+  "Fullbody": ["Bench Press", "Incline Bench Press", "Barbell Pullover", "Back Rows", "Upper Back Row", "Military Press", "Wide Grip Upright Rows", "Bicep Curls", "Drag Curls", "Spider Curls", "Hammer Curls", "Preacher Curls", "Skull Crushers", "Overhead Tricep Extensions", "Close Grip Barbell Press", "Squats", "Split Squats", "Bulgarian Split Squats", "B-Stance Squats", "Reverse Lunges", "Lunges", "Deadlifts", "Romanian Deadlifts", "Straight Leg Deadlifts", "Sumo Deadlifts", "Trap Bar Deadlifts", "Hip Thrusts"],
+  "Upper": ["Bench Press", "Incline Bench Press", "Barbell Pullover", "Back Rows", "Upper Back Row", "Military Press", "Wide Grip Upright Rows", "Bicep Curls", "Drag Curls", "Spider Curls", "Hammer Curls", "Preacher Curls", "Skull Crushers", "Overhead Tricep Extensions", "Close Grip Barbell Press"],
+  "Lower": ["Squats", "Split Squats", "Bulgarian Split Squats", "B-Stance Squats", "Reverse Lunges", "Lunges", "Deadlifts", "Romanian Deadlifts", "Straight Leg Deadlifts", "Sumo Deadlifts", "Trap Bar Deadlifts", "Hip Thrusts"],
+  "Push": ["Bench Press", "Incline Bench Press", "Barbell Pullover", "Military Press", "Wide Grip Upright Rows", "Skull Crushers", "Overhead Tricep Extensions", "Close Grip Barbell Press"],
+  "Pull": ["Back Rows", "Upper Back Row", "Bicep Curls", "Drag Curls", "Spider Curls", "Hammer Curls", "Preacher Curls"],
+  "Squats": ["Squats", "Split Squats", "Bulgarian Split Squats", "B-Stance Squats", "Reverse Lunges", "Lunges"],
+  "Hinge": ["Deadlifts", "Romanian Deadlifts", "Straight Leg Deadlifts", "Sumo Deadlifts", "Trap Bar Deadlifts", "Hip Thrusts"]
+};
 
-const gymExercises = { /* same as previous block */ };
-const homeExercises = { /* same as previous block */ };
+const homeExercises = {
+  "Fullbody": ["Push-ups", "Decline Push Ups", "Medicine Ball Push Ups", "Chest Dips", "Pull-ups", "Dips", "Polar Press", "Crocodile Push Ups", "Squats", "Lunges", "Reverse Lunges", "Frog Squats", "Hamstring Walkbacks"],
+  "Upper": ["Push-ups", "Decline Push Ups", "Medicine Ball Push Ups", "Chest Dips", "Pull-ups", "Dips", "Polar Press", "Crocodile Push Ups"],
+  "Lower": ["Squats", "Lunges", "Reverse Lunges", "Frog Squats", "Hamstring Walkbacks"],
+  "Push": ["Push-ups", "Decline Push Ups", "Medicine Ball Push Ups", "Chest Dips", "Dips", "Polar Press", "Crocodile Push Ups"],
+  "Pull": ["Pull-ups"],
+  "Squats": ["Squats", "Lunges", "Reverse Lunges", "Frog Squats"],
+  "Hinge": ["Hamstring Walkbacks"],
+  "Core": ["Standing Twists", "Heel Taps", "Crunches", "V sit", "Hand Walk Outs", "Reverse Crunches"]
+};
+
 const gymEquipment = ["Barbells", "Dumbbells", "Cables", "Weight Machines", "Resistance Bands", "Bodyweight", "Kettlebells"];
 const homeEquipment = ["Bodyweight", "Resistance Bands"];
+
+const bestWeights = {}; // key: exercise, value: best weight
 
 function populateEquipmentDropdown() {
   const location = document.getElementById("location").value;
@@ -41,8 +60,10 @@ function populateExerciseDropdown() {
   const focus = document.getElementById("focus").value;
   const equipment = document.getElementById("equipmentDropdown").value;
   const exerciseDropdown = document.getElementById("exerciseDropdown");
+  const bestWeightSpan = document.querySelector(".best-weight");
 
   exerciseDropdown.innerHTML = "<option value='' disabled selected>Select an Exercise</option>";
+  bestWeightSpan.textContent = "";
 
   if (!location || !focus || !equipment) return;
 
@@ -54,12 +75,12 @@ function populateExerciseDropdown() {
     option.textContent = exercise;
     exerciseDropdown.appendChild(option);
   });
-}
 
-function updateBestWeightDisplay() {
-  const exercise = document.getElementById("exerciseDropdown").value;
-  const bestWeightElement = document.querySelector(".best-weight");
-  bestWeightElement.textContent = bestWeights[exercise] || "-";
+  exerciseDropdown.onchange = function () {
+    const selectedExercise = this.value;
+    const best = bestWeights[selectedExercise];
+    bestWeightSpan.textContent = best ? best + " kg" : "N/A";
+  };
 }
 
 function saveData() {
@@ -75,11 +96,11 @@ function saveData() {
     return;
   }
 
+  const bestWeightSpan = document.querySelector(".best-weight");
   if (!bestWeights[exercise] || weight > bestWeights[exercise]) {
     bestWeights[exercise] = weight;
+    bestWeightSpan.textContent = weight + " kg";
   }
-
-  updateBestWeightDisplay();
 
   const tableBody = focus === "Upper" ? document.querySelector("#upperBodyTable tbody") : document.querySelector("#lowerBodyTable tbody");
 
@@ -102,9 +123,7 @@ function saveData() {
   document.getElementById("equipmentDropdown").value = "";
   document.getElementById("exerciseDropdown").value = "";
   document.querySelector(".exercise-weight").value = "";
-  document.querySelector(".best-weight").textContent = "-";
+  bestWeightSpan.textContent = "";
 }
 
-document.addEventListener("DOMContentLoaded", () => {
-  document.getElementById("defaultOpen").click();
-});
+document.getElementById("defaultOpen").click();
