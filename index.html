@@ -1,18 +1,23 @@
+<!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Workout Tracker</title>
-  <link rel="stylesheet" href="styles.css">
+  <meta charset="UTF-8" />
+  <title>Workout + Weight Tracker</title>
+  <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
   <button onclick="toggleDarkMode()">Toggle Dark Mode</button>
 
+  <!-- Workout Tabs -->
   <div class="tab">
     <button class="tablinks" onclick="openTab(event, 'WorkoutInput')" id="defaultOpen">Workout Input</button>
     <button class="tablinks" onclick="openTab(event, 'UpperBody')">Upper Body Log</button>
     <button class="tablinks" onclick="openTab(event, 'LowerBody')">Lower Body Log</button>
+    <button class="tablinks" onclick="openTab(event, 'WeightTracker')">Weight Tracker</button>
+    <button class="tablinks" onclick="openTab(event, 'WeightGraph')">Weight Graph</button>
   </div>
 
+  <!-- Workout Input -->
   <div id="WorkoutInput" class="tabcontent">
     <h2>Workout Input</h2>
     
@@ -56,11 +61,13 @@
     <input type="text" id="customExerciseInput" placeholder="Enter custom exercise">
     <button onclick="addCustomExercise()">Add</button>
 
-    <h3>Rest Timer</h3>
-    <button onclick="startRestTimer()">Start Rest</button>
+    <h3>Workout Rest Timer</h3>
+    <input type="number" id="restInputWorkout" placeholder="Enter rest time (min)">
+    <button onclick="startRestTimerWorkout()">Start Rest</button>
     <div id="restTimer">Rest: --</div>
   </div>
 
+  <!-- Upper Body -->
   <div id="UpperBody" class="tabcontent">
     <h2>Upper Body Workout Log</h2>
     <table id="upperBodyTable">
@@ -78,6 +85,7 @@
     </table>
   </div>
 
+  <!-- Lower Body -->
   <div id="LowerBody" class="tabcontent">
     <h2>Lower Body Workout Log</h2>
     <table id="lowerBodyTable">
@@ -95,6 +103,32 @@
     </table>
   </div>
 
+  <!-- Weight Tracker -->
+  <div id="WeightTracker" class="tabcontent">
+    <h2>Add Weight Entry</h2>
+    <input type="number" id="weightInput" placeholder="Enter your weight (kg)" />
+    <input type="date" id="dateInput" />
+    <input type="time" id="timeInput" />
+    <button onclick="addWeight()" id="addBtn">Add Weight</button>
+
+    <h2>Your Entries</h2>
+    <div id="entries"></div>
+
+    <hr />
+    <h3>Weight Rest Timer</h3>
+    <input type="number" id="restInput" placeholder="Enter rest time (min)">
+    <button onclick="startRestTimer()">Start Rest</button>
+    <div id="restCountdown"></div>
+  </div>
+
+  <!-- Weight Graph -->
+  <div id="WeightGraph" class="tabcontent">
+    <h2>Weight Progress Graph</h2>
+    <canvas id="weightChart"></canvas>
+  </div>
+
+  <!-- Scripts -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <script src="script.js"></script>
 </body>
 </html>
