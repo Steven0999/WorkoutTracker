@@ -1,13 +1,22 @@
+/* Base Styling */
 body {
   background-color: grey;
   color: orange;
   font-family: Arial, sans-serif;
+  margin: 20px;
 }
 
+h1, h2, h3 {
+  margin-top: 0;
+}
+
+/* Tab Navigation */
 .tab {
   overflow: hidden;
   border: 1px solid #ccc;
   background-color: #f1f1f1;
+  margin-bottom: 20px;
+  border-radius: 4px;
 }
 
 .tab button {
@@ -19,6 +28,7 @@ body {
   padding: 14px 16px;
   transition: 0.3s;
   font-size: 17px;
+  color: orange;
 }
 
 .tab button:hover {
@@ -31,20 +41,58 @@ body {
 
 .tabcontent {
   display: none;
-  padding: 6px 12px;
+  padding: 12px;
   border: 1px solid #ccc;
   border-top: none;
+  background-color: #fff;
+  color: black;
+  border-radius: 0 0 8px 8px;
 }
 
 .tabcontent.active {
   display: block;
 }
 
+/* Form Inputs */
+input[type="number"],
+input[type="text"],
+input[type="date"],
+input[type="time"],
+select {
+  padding: 8px;
+  margin: 5px 0 10px;
+  width: 100%;
+  max-width: 300px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+/* Submit & Action Buttons */
+button,
+.submit-button,
+.clear-button {
+  background-color: white;
+  color: black;
+  border: none;
+  padding: 6px 10px;
+  cursor: pointer;
+  border-radius: 4px;
+  margin-top: 5px;
+}
+
+button:hover,
+.submit-button:hover,
+.clear-button:hover {
+  background-color: #ddd;
+}
+
+/* Table Styling */
 table {
   border-collapse: collapse;
   width: 100%;
   background-color: black;
   color: orange;
+  margin-top: 10px;
 }
 
 th, td {
@@ -55,18 +103,39 @@ th, td {
 
 th {
   background-color: #f2f2f2;
-}
-
-.submit-button,
-.clear-button {
-  background-color: white;
   color: black;
-  border: none;
-  padding: 6px 10px;
-  cursor: pointer;
-  border-radius: 4px;
 }
 
+/* Cards for Weight Entries */
+.card {
+  background-color: #444;
+  color: orange;
+  margin-bottom: 10px;
+  padding: 10px;
+  border-radius: 6px;
+}
+
+.flex-space-between {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+/* Timer Display */
+#restCountdown,
+#restTimer {
+  font-size: 1.2em;
+  font-weight: bold;
+  margin-top: 10px;
+}
+
+/* Chart Canvas */
+canvas {
+  max-width: 100%;
+  margin-top: 20px;
+}
+
+/* Modal Styling */
 .modal {
   display: none;
   position: fixed;
@@ -94,6 +163,7 @@ th {
   cursor: pointer;
 }
 
+/* Toggle Switch */
 .switch {
   position: relative;
   display: inline-block;
