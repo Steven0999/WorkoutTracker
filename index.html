@@ -1,134 +1,187 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <title>Workout + Weight Tracker</title>
-  <link rel="stylesheet" href="styles.css" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Workout Weight Tracker</title>
+  <link rel="stylesheet" href="styles.css">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #f4f4f4;
+      transition: background-color 0.3s;
+    }
+    .dark-mode {
+      background-color: #2c3e50;
+      color: white;
+    }
+    .tabcontent {
+      display: none;
+    }
+    .tabcontent.active {
+      display: block;
+    }
+    .tablinks {
+      padding: 10px 20px;
+      cursor: pointer;
+      background-color: #f1f1f1;
+      border: none;
+      font-size: 16px;
+      transition: 0.3s;
+    }
+    .tablinks.active {
+      background-color: #3498db;
+      color: white;
+    }
+    .tab {
+      display: flex;
+      justify-content: center;
+      margin-top: 20px;
+    }
+    .card {
+      background-color: #fff;
+      padding: 10px;
+      margin: 10px;
+      border-radius: 5px;
+      box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+    }
+    .card button {
+      background-color: #e74c3c;
+      color: white;
+      border: none;
+      padding: 5px 10px;
+      cursor: pointer;
+    }
+    .card button:hover {
+      background-color: #c0392b;
+    }
+    #weightChart {
+      width: 100%;
+      height: 300px;
+      margin-top: 20px;
+    }
+    #weightList {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+    }
+    .card .flex-space-between {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .flex-space-between button {
+      margin-left: 10px;
+    }
+    .input-container {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .input-container input,
+    .input-container select,
+    .input-container button {
+      padding: 10px;
+      font-size: 14px;
+      border-radius: 5px;
+    }
+  </style>
 </head>
 <body>
-  <button onclick="toggleDarkMode()">Toggle Dark Mode</button>
 
-  <!-- Workout Tabs -->
+  <!-- Dark Mode Toggle -->
+  <button onclick="toggleDarkMode()" style="position: absolute; top: 10px; right: 10px;">
+    Toggle Dark Mode
+  </button>
+
+  <!-- Tab Navigation -->
   <div class="tab">
-    <button class="tablinks" onclick="openTab(event, 'WorkoutInput')" id="defaultOpen">Workout Input</button>
-    <button class="tablinks" onclick="openTab(event, 'UpperBody')">Upper Body Log</button>
-    <button class="tablinks" onclick="openTab(event, 'LowerBody')">Lower Body Log</button>
-    <button class="tablinks" onclick="openTab(event, 'WeightTracker')">Weight Tracker</button>
-    <button class="tablinks" onclick="openTab(event, 'WeightGraph')">Weight Graph</button>
+    <button class="tablinks" id="defaultOpen" onclick="openTab(event, 'workout')">Workout</button>
+    <button class="tablinks" onclick="openTab(event, 'weightTracking')">Weight Tracking</button>
   </div>
 
-  <!-- Workout Input -->
-  <div id="WorkoutInput" class="tabcontent">
-    <h2>Workout Input</h2>
-    
-    <label for="location">Location:</label>
-    <select id="location" onchange="populateEquipmentDropdown()">
-      <option value="" disabled selected>Select Location</option>
-      <option value="gym">Gym</option>
-      <option value="home">Home</option>
-    </select>
+  <!-- Workout Tab Content -->
+  <div id="workout" class="tabcontent">
+    <div class="input-container">
+      <select id="location" onchange="populateEquipmentDropdown()">
+        <option value="">Select Location</option>
+        <option value="gym">Gym</option>
+        <option value="home">Home</option>
+      </select>
 
-    <label for="focus">Workout Focus:</label>
-    <select id="focus" onchange="populateExerciseDropdown()">
-      <option value="" disabled selected>Select Focus</option>
-      <option value="Fullbody">Fullbody</option>
-      <option value="Upper">Upper</option>
-      <option value="Lower">Lower</option>
-      <option value="Push">Push</option>
-      <option value="Pull">Pull</option>
-      <option value="Squats">Squats</option>
-      <option value="Hinge">Hinge</option>
-      <option value="Core">Core</option>
-    </select>
+      <select id="equipmentDropdown" onchange="populateExerciseDropdown()">
+        <option value="">Select Equipment</option>
+      </select>
 
-    <label for="equipmentDropdown">Equipment:</label>
-    <select id="equipmentDropdown" onchange="populateExerciseDropdown()"></select>
+      <select id="exerciseDropdown">
+        <option value="">Select Exercise</option>
+      </select>
 
-    <label for="exerciseDropdown">Exercise:</label>
-    <select id="exerciseDropdown"></select>
+      <input type="text" id="customExerciseInput" placeholder="Add Custom Exercise" />
+      <button type="button" onclick="addCustomExercise()">Add Custom Exercise</button>
 
-    <div>
-      <label>Best Weight (kg):</label>
-      <span class="best-weight">-</span>
+      <input type="number" class="exercise-weight" placeholder="Enter Weight (kg)" />
+
+      <select id="focus">
+        <option value="Upper">Upper Body</option>
+        <option value="Lower">Lower Body</option>
+      </select>
+
+      <button type="button" onclick="saveData()">Save Workout</button>
     </div>
 
-    <label for="weight">Weight (kg):</label>
-    <input type="number" class="exercise-weight" placeholder="Enter weight">
+    <div>
+      <h3>Upper Body Workouts</h3>
+      <table id="upperBodyTable">
+        <thead>
+          <tr>
+            <th>Equipment</th>
+            <th>Exercise</th>
+            <th>Sets</th>
+            <th>Reps</th>
+            <th>Weight</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+    </div>
 
-    <button class="submit-button" onclick="saveData()">Submit</button>
-
-    <h3>Add Custom Exercise</h3>
-    <input type="text" id="customExerciseInput" placeholder="Enter custom exercise">
-    <button onclick="addCustomExercise()">Add</button>
-
-    <h3>Workout Rest Timer</h3>
-    <input type="number" id="restInputWorkout" placeholder="Enter rest time (min)">
-    <button onclick="startRestTimerWorkout()">Start Rest</button>
-    <div id="restTimer">Rest: --</div>
+    <div>
+      <h3>Lower Body Workouts</h3>
+      <table id="lowerBodyTable">
+        <thead>
+          <tr>
+            <th>Equipment</th>
+            <th>Exercise</th>
+            <th>Sets</th>
+            <th>Reps</th>
+            <th>Weight</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+    </div>
   </div>
 
-  <!-- Upper Body -->
-  <div id="UpperBody" class="tabcontent">
-    <h2>Upper Body Workout Log</h2>
-    <table id="upperBodyTable">
-      <thead>
-        <tr>
-          <th>Equipment</th>
-          <th>Exercise</th>
-          <th>Sets</th>
-          <th>Reps</th>
-          <th>Weight</th>
-          <th>Clear</th>
-        </tr>
-      </thead>
-      <tbody></tbody>
-    </table>
-  </div>
+  <!-- Weight Tracking Tab Content -->
+  <div id="weightTracking" class="tabcontent">
+    <div class="input-container">
+      <input type="text" id="searchExercise" placeholder="Search exercise..." oninput="searchExercise()">
+      <button type="button" onclick="startRestTimer()">Start Rest Timer</button>
+      <div id="restTimer"></div>
+    </div>
 
-  <!-- Lower Body -->
-  <div id="LowerBody" class="tabcontent">
-    <h2>Lower Body Workout Log</h2>
-    <table id="lowerBodyTable">
-      <thead>
-        <tr>
-          <th>Equipment</th>
-          <th>Exercise</th>
-          <th>Sets</th>
-          <th>Reps</th>
-          <th>Weight</th>
-          <th>Clear</th>
-        </tr>
-      </thead>
-      <tbody></tbody>
-    </table>
-  </div>
-
-  <!-- Weight Tracker -->
-  <div id="WeightTracker" class="tabcontent">
-    <h2>Add Weight Entry</h2>
-    <input type="number" id="weightInput" placeholder="Enter your weight (kg)" />
-    <input type="date" id="dateInput" />
-    <input type="time" id="timeInput" />
-    <button onclick="addWeight()" id="addBtn">Add Weight</button>
-
-    <h2>Your Entries</h2>
-    <div id="entries"></div>
-
-    <hr />
-    <h3>Weight Rest Timer</h3>
-    <input type="number" id="restInput" placeholder="Enter rest time (min)">
-    <button onclick="startRestTimer()">Start Rest</button>
-    <div id="restCountdown"></div>
-  </div>
-
-  <!-- Weight Graph -->
-  <div id="WeightGraph" class="tabcontent">
-    <h2>Weight Progress Graph</h2>
+    <div id="weightList"></div>
     <canvas id="weightChart"></canvas>
   </div>
 
-  <!-- Scripts -->
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-  <script src="script.js"></script>
+  <script>
+    // Insert JavaScript code here (from previous response)
+  </script>
 </body>
 </html>
