@@ -89,7 +89,7 @@ function addCustomExercise() {
   }
 }
 
-// Save workout log into the appropriate table
+// Save workout log into the appropriate table and graph
 function saveData() {
   const equipment = document.getElementById('equipmentDropdown').value;
   const exercise = document.getElementById('exerciseDropdown').value;
@@ -117,26 +117,32 @@ function saveData() {
 
   table.appendChild(row);
   document.querySelector('.exercise-weight').value = '';  // Clear weight input
+
+  // Add to weight data
+  addWeightEntry(exercise, weight);
 }
 
 // Rest Timer Logic
 function startRestTimer() {
   const input = prompt("Enter rest time in seconds:");
   const duration = parseInt(input);
-  if (!isNaN(duration) && duration > 0) {
-    let remaining = duration;
-    const timerDisplay = document.getElementById('restTimer');
-    const interval = setInterval(() => {
-      timerDisplay.textContent = `Rest: ${remaining}s`;
-      remaining--;
-      if (remaining < 0) {
-        clearInterval(interval);
-        timerDisplay.textContent = 'Rest: Done!';
-      }
-    }, 1000);
-  } else {
-    alert("Please enter a valid number.");
+
+  // Prevent submitting invalid rest time
+  if (isNaN(duration) || duration <= 0) {
+    alert("Please enter a valid rest time greater than 0.");
+    return;
   }
+
+  let remaining = duration;
+  const timerDisplay = document.getElementById('restTimer');
+  const interval = setInterval(() => {
+    timerDisplay.textContent = `Rest: ${remaining}s`;
+    remaining--;
+    if (remaining < 0) {
+      clearInterval(interval);
+      timerDisplay.textContent = 'Rest: Done!';
+    }
+  }, 1000);
 }
 
 // Weight Tracker Logic
@@ -167,22 +173,15 @@ function renderWeightEntries() {
 }
 
 // Add a new weight entry
-function addWeightEntry() {
-  const weight = document.getElementById('weightInput').value;
-  const date = document.getElementById('dateInput').value;
-  const time = document.getElementById('timeInput').value;
-  
-  // Validate if all fields are filled
-  if (weight && date && time) {
-    weightData.push({ weight, date, time });
-    localStorage.setItem('weightData', JSON.stringify(weightData));
-    renderWeightEntries();
-    document.getElementById('weightInput').value = '';
-    document.getElementById('dateInput').value = '';
-    document.getElementById('timeInput').value = '';
-  } else {
-    alert('Please fill in all fields');
-  }
+function addWeightEntry(exercise, weight) {
+  const date = new Date();
+  const formattedDate = date.toISOString().split('T')[0];
+  const time = date.toTimeString().split(' ')[0];
+
+  weightData.push({ exercise, weight, date: formattedDate, time });
+  localStorage.setItem('weightData', JSON.stringify(weightData));
+  renderWeightEntries();
+  updateChart();  // Update the chart after adding new data
 }
 
 // Edit an existing weight entry
@@ -194,7 +193,7 @@ function editEntry(index) {
   
   // Validate if edited values are valid
   if (newWeight && newDate && newTime) {
-    weightData[index] = { weight: newWeight, date: newDate, time: newTime };
+    weightData[index] = { exercise: entry.exercise, weight: newWeight, date: newDate, time: newTime };
     localStorage.setItem('weightData', JSON.stringify(weightData));
     renderWeightEntries();
   }
@@ -209,13 +208,21 @@ function deleteEntry(index) {
   }
 }
 
-// Update weight chart with the latest data
-function updateChart() {
+// Search for exercises and filter the data to show on the graph
+function searchExercise() {
+  const searchTerm = document.getElementById('searchExercise').value.toLowerCase();
+  const filteredData = weightData.filter(entry => entry.exercise.toLowerCase().includes(searchTerm));
+  updateChart(filteredData);  // Update the chart with filtered data
+}
+
+// Update the chart with the latest data
+function updateChart(filteredData = weightData) {
   if (window.weightChartInstance) {
     window.weightChartInstance.destroy();  // Destroy previous chart instance if it exists
   }
-  const labels = weightData.map(e => `${e.date} ${e.time}`);
-  const data = weightData.map(e => parseFloat(e.weight));
+  
+  const labels = filteredData.map(e => `${e.date} ${e.time}`);
+  const data = filteredData.map(e => parseFloat(e.weight));
 
   window.weightChartInstance = new Chart(weightChartCtx, {
     type: 'line',
@@ -247,3 +254,33 @@ renderWeightEntries();
 window.onload = function() {
   renderWeightEntries();
 };
+
+// Form Validation for weight entry form
+document.getElementById('submitWeightForm').addEventListener('submit', function(event) {
+  event.preventDefault();
+  const weightInput = document.getElementById('weightInput').value;
+  const dateInput = document.getElementById('dateInput').value;
+  const timeInput = document.getElementById('timeInput').value;
+
+  if (!weightInput || !dateInput || !timeInput) {
+    alert('Please fill in all fields');
+    return;
+  }
+
+  // If valid, submit weight data
+  addWeightEntry(exercise, weightInput);
+  updateChart();
+  clearForm();
+});
+
+// Clear the weight input form
+function clearForm() {
+  document.getElementById('weightInput').value = '';
+  document.getElementById('dateInput').value = '';
+  document.getElementById('timeInput').value = '';
+}
+
+// Search bar and filtering functionality
+document.getElementById('searchExercise').addEventListener('input', function(event) {
+  searchExercise();
+});
