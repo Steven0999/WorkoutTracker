@@ -1,10 +1,9 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Workout & Weight Tracker</title>
-  <link rel="stylesheet" href="styles.css" />
+  <meta charset="UTF-8">
+  <title>Workout and Weight Tracker</title>
+  <link rel="stylesheet" href="styles.css">
 </head>
 <body>
   <button onclick="toggleDarkMode()">Toggle Dark Mode</button>
@@ -16,9 +15,9 @@
     <button class="tablinks" onclick="openTab(event, 'WeightTracker')">Weight Tracker</button>
   </div>
 
+  <!-- Workout Input -->
   <div id="WorkoutInput" class="tabcontent">
     <h2>Workout Input</h2>
-
     <label for="location">Location:</label>
     <select id="location" onchange="populateEquipmentDropdown()">
       <option value="" disabled selected>Select Location</option>
@@ -32,11 +31,6 @@
       <option value="Fullbody">Fullbody</option>
       <option value="Upper">Upper</option>
       <option value="Lower">Lower</option>
-      <option value="Push">Push</option>
-      <option value="Pull">Pull</option>
-      <option value="Squats">Squats</option>
-      <option value="Hinge">Hinge</option>
-      <option value="Core">Core</option>
     </select>
 
     <label for="equipmentDropdown">Equipment:</label>
@@ -51,22 +45,22 @@
     </div>
 
     <label for="weight">Weight (kg):</label>
-    <input type="number" class="exercise-weight" placeholder="Enter weight" />
+    <input type="number" class="exercise-weight" placeholder="Enter weight">
 
     <button class="submit-button" onclick="saveData()">Submit</button>
 
     <h3>Add Custom Exercise</h3>
-    <input type="text" id="customExerciseInput" placeholder="Enter custom exercise" />
+    <input type="text" id="customExerciseInput" placeholder="Enter custom exercise">
     <button onclick="addCustomExercise()">Add</button>
 
     <h3>Rest Timer</h3>
-    <input type="number" id="restInput" placeholder="Seconds" />
     <button onclick="startRestTimer()">Start Rest</button>
     <div id="restTimer">Rest: --</div>
   </div>
 
+  <!-- Upper Body Log -->
   <div id="UpperBody" class="tabcontent">
-    <h2>Upper Body Workout Log</h2>
+    <h2>Upper Body Log</h2>
     <table id="upperBodyTable">
       <thead>
         <tr>
@@ -82,8 +76,9 @@
     </table>
   </div>
 
+  <!-- Lower Body Log -->
   <div id="LowerBody" class="tabcontent">
-    <h2>Lower Body Workout Log</h2>
+    <h2>Lower Body Log</h2>
     <table id="lowerBodyTable">
       <thead>
         <tr>
@@ -99,30 +94,30 @@
     </table>
   </div>
 
+  <!-- Weight Tracker -->
   <div id="WeightTracker" class="tabcontent">
     <h2>Weight Tracker</h2>
+    <input type="text" id="exerciseFilterInput" placeholder="Search by Exercise" oninput="filterByExercise()">
 
-    <label for="weightInput">Weight (kg):</label>
-    <input type="number" id="weightInput" />
+    <div class="weight-entry-form">
+      <label for="exerciseNameInput">Exercise:</label>
+      <input type="text" id="exerciseNameInput" placeholder="Enter exercise name">
+      
+      <label for="weightInput">Weight (kg):</label>
+      <input type="number" id="weightInput">
 
-    <label for="dateInput">Date:</label>
-    <input type="date" id="dateInput" />
+      <label for="dateInput">Date:</label>
+      <input type="date" id="dateInput">
 
-    <label for="timeInput">Time:</label>
-    <input type="time" id="timeInput" />
+      <label for="timeInput">Time:</label>
+      <input type="time" id="timeInput">
 
-    <label for="exerciseRecordInput">Exercise:</label>
-    <input type="text" id="exerciseRecordInput" placeholder="e.g., Bench Press" />
-
-    <button onclick="addWeightEntry()">Add Entry</button>
-
-    <div>
-      <h3>Search Exercise</h3>
-      <input type="text" id="searchExerciseInput" oninput="filterGraph()" placeholder="Search exercise..."/>
+      <button onclick="addWeightEntry()">Add Weight</button>
     </div>
 
-    <canvas id="weightChart" width="400" height="200"></canvas>
     <div id="weightList"></div>
+
+    <canvas id="weightChart" width="400" height="200"></canvas>
   </div>
 
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
