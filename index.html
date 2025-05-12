@@ -3,68 +3,70 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Workout Weight Tracker</title>
-  <link rel="stylesheet" href="styles.css"/>
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <title>Workout & Weight Tracker</title>
+  <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
+  <button onclick="toggleDarkMode()">Toggle Dark Mode</button>
 
-  <!-- Header -->
-  <header>
-    <h1>Workout and Weight Tracker</h1>
-    <p>Track your exercise performance and rest periods with ease.</p>
-  </header>
-
-  <!-- Dark Mode Toggle -->
-  <button onclick="toggleDarkMode()" class="dark-mode-toggle">Toggle Dark Mode</button>
-
-  <!-- Tab Navigation -->
   <div class="tab">
-    <button class="tablinks" id="defaultOpen" onclick="openTab(event, 'workout')">Workout</button>
-    <button class="tablinks" onclick="openTab(event, 'weightTracking')">Weight Tracking</button>
-    <button class="tablinks" onclick="openTab(event, 'history')">History</button>
+    <button class="tablinks" onclick="openTab(event, 'WorkoutInput')" id="defaultOpen">Workout Input</button>
+    <button class="tablinks" onclick="openTab(event, 'UpperBody')">Upper Body Log</button>
+    <button class="tablinks" onclick="openTab(event, 'LowerBody')">Lower Body Log</button>
+    <button class="tablinks" onclick="openTab(event, 'WeightTracker')">Weight Tracker</button>
   </div>
 
-  <!-- Workout Tab -->
-  <div id="workout" class="tabcontent">
-    <h2>Create Your Workout</h2>
+  <div id="WorkoutInput" class="tabcontent">
+    <h2>Workout Input</h2>
 
-    <div class="input-container">
-      <label for="location">Location:</label>
-      <select id="location" onchange="populateEquipmentDropdown()">
-        <option value="">Select Location</option>
-        <option value="gym">Gym</option>
-        <option value="home">Home</option>
-      </select>
+    <label for="location">Location:</label>
+    <select id="location" onchange="populateEquipmentDropdown()">
+      <option value="" disabled selected>Select Location</option>
+      <option value="gym">Gym</option>
+      <option value="home">Home</option>
+    </select>
 
-      <label for="equipmentDropdown">Equipment:</label>
-      <select id="equipmentDropdown" onchange="populateExerciseDropdown()">
-        <option value="">Select Equipment</option>
-      </select>
+    <label for="focus">Workout Focus:</label>
+    <select id="focus" onchange="populateExerciseDropdown()">
+      <option value="" disabled selected>Select Focus</option>
+      <option value="Fullbody">Fullbody</option>
+      <option value="Upper">Upper</option>
+      <option value="Lower">Lower</option>
+      <option value="Push">Push</option>
+      <option value="Pull">Pull</option>
+      <option value="Squats">Squats</option>
+      <option value="Hinge">Hinge</option>
+      <option value="Core">Core</option>
+    </select>
 
-      <label for="exerciseDropdown">Exercise:</label>
-      <select id="exerciseDropdown">
-        <option value="">Select Exercise</option>
-      </select>
+    <label for="equipmentDropdown">Equipment:</label>
+    <select id="equipmentDropdown" onchange="populateExerciseDropdown()"></select>
 
-      <label for="customExerciseInput">Custom Exercise:</label>
-      <input type="text" id="customExerciseInput" placeholder="Add Custom Exercise" />
-      <button onclick="addCustomExercise()">Add Exercise</button>
+    <label for="exerciseDropdown">Exercise:</label>
+    <select id="exerciseDropdown"></select>
 
-      <label for="exercise-weight">Weight (kg):</label>
-      <input type="number" class="exercise-weight" placeholder="Enter Weight" />
-
-      <label for="focus">Focus:</label>
-      <select id="focus">
-        <option value="">Select Focus</option>
-        <option value="Upper">Upper Body</option>
-        <option value="Lower">Lower Body</option>
-      </select>
-
-      <button onclick="saveData()">Save Workout</button>
+    <div>
+      <label>Best Weight (kg):</label>
+      <span class="best-weight">-</span>
     </div>
 
-    <h3>Upper Body Workouts</h3>
+    <label for="weight">Weight (kg):</label>
+    <input type="number" class="exercise-weight" placeholder="Enter weight" />
+
+    <button class="submit-button" onclick="saveData()">Submit</button>
+
+    <h3>Add Custom Exercise</h3>
+    <input type="text" id="customExerciseInput" placeholder="Enter custom exercise" />
+    <button onclick="addCustomExercise()">Add</button>
+
+    <h3>Rest Timer</h3>
+    <input type="number" id="restInput" placeholder="Seconds" />
+    <button onclick="startRestTimer()">Start Rest</button>
+    <div id="restTimer">Rest: --</div>
+  </div>
+
+  <div id="UpperBody" class="tabcontent">
+    <h2>Upper Body Workout Log</h2>
     <table id="upperBodyTable">
       <thead>
         <tr>
@@ -73,13 +75,15 @@
           <th>Sets</th>
           <th>Reps</th>
           <th>Weight</th>
-          <th>Action</th>
+          <th>Clear</th>
         </tr>
       </thead>
       <tbody></tbody>
     </table>
+  </div>
 
-    <h3>Lower Body Workouts</h3>
+  <div id="LowerBody" class="tabcontent">
+    <h2>Lower Body Workout Log</h2>
     <table id="lowerBodyTable">
       <thead>
         <tr>
@@ -88,60 +92,40 @@
           <th>Sets</th>
           <th>Reps</th>
           <th>Weight</th>
-          <th>Action</th>
+          <th>Clear</th>
         </tr>
       </thead>
       <tbody></tbody>
     </table>
   </div>
 
-  <!-- Weight Tracking Tab -->
-  <div id="weightTracking" class="tabcontent">
-    <h2>Track Your Weights</h2>
+  <div id="WeightTracker" class="tabcontent">
+    <h2>Weight Tracker</h2>
 
-    <div class="input-container">
-      <input type="text" id="searchExercise" placeholder="Search exercise..." oninput="searchExercise()">
-      <button onclick="startRestTimer()">Start Rest Timer</button>
-      <div id="restTimer"></div>
+    <label for="weightInput">Weight (kg):</label>
+    <input type="number" id="weightInput" />
+
+    <label for="dateInput">Date:</label>
+    <input type="date" id="dateInput" />
+
+    <label for="timeInput">Time:</label>
+    <input type="time" id="timeInput" />
+
+    <label for="exerciseRecordInput">Exercise:</label>
+    <input type="text" id="exerciseRecordInput" placeholder="e.g., Bench Press" />
+
+    <button onclick="addWeightEntry()">Add Entry</button>
+
+    <div>
+      <h3>Search Exercise</h3>
+      <input type="text" id="searchExerciseInput" oninput="filterGraph()" placeholder="Search exercise..."/>
     </div>
 
-    <section id="graphSection">
-      <h3>Progress Graph</h3>
-      <canvas id="weightChart"></canvas>
-    </section>
-
-    <section id="weightListSection">
-      <h3>All Recorded Entries</h3>
-      <div id="weightList"></div>
-    </section>
+    <canvas id="weightChart" width="400" height="200"></canvas>
+    <div id="weightList"></div>
   </div>
 
-  <!-- History Tab -->
-  <div id="history" class="tabcontent">
-    <h2>Workout History</h2>
-    <p>This section will show a list of past completed workout sessions.</p>
-    <ul id="historyList">
-      <li>April 2, 2025 — Upper Body — Bench Press, 80kg</li>
-      <li>April 5, 2025 — Lower Body — Squats, 100kg</li>
-      <li>April 7, 2025 — Upper Body — Pull-ups, Bodyweight</li>
-      <li>April 10, 2025 — Lower Body — Deadlifts, 120kg</li>
-      <li>April 12, 2025 — Upper Body — Dumbbell Press, 30kg</li>
-    </ul>
-
-    <h3>Filter History</h3>
-    <select>
-      <option value="all">All</option>
-      <option value="upper">Upper Body</option>
-      <option value="lower">Lower Body</option>
-    </select>
-  </div>
-
-  <!-- Footer -->
-  <footer>
-    <p>&copy; 2025 Workout Tracker. All rights reserved.</p>
-    <p><a href="#">Privacy Policy</a> | <a href="#">Contact</a></p>
-  </footer>
-
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <script src="script.js"></script>
 </body>
 </html>
