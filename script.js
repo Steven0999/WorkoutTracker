@@ -1,286 +1,60 @@
-// Dark mode toggle function to switch between light and dark themes
-function toggleDarkMode() {
-  document.body.classList.toggle('dark-mode');
-}
+// Dark mode toggle function toggleDarkMode() { document.body.classList.toggle('dark-mode'); localStorage.setItem('darkMode', document.body.classList.contains('dark-mode')); }
 
-// Tab switching functionality
-function openTab(evt, tabName) {
-  const tabcontent = document.getElementsByClassName('tabcontent');
-  // Hide all tab contents
-  for (let i = 0; i < tabcontent.length; i++) {
-    tabcontent[i].style.display = 'none';
-  }
-  const tablinks = document.getElementsByClassName('tablinks');
-  // Remove the active class from all tab links
-  for (let i = 0; i < tablinks.length; i++) {
-    tablinks[i].className = tablinks[i].className.replace(' active', '');
-  }
-  // Show the clicked tab's content
-  document.getElementById(tabName).style.display = 'block';
-  // Add the active class to the clicked tab link
-  evt.currentTarget.className += ' active';
-}
+// Restore dark mode from localStorage if (localStorage.getItem('darkMode') === 'true') { document.body.classList.add('dark-mode'); }
 
-// Default tab click to display the first tab content
+// Tab switching function openTab(evt, tabName) { const tabcontent = document.getElementsByClassName('tabcontent'); for (let i = 0; i < tabcontent.length; i++) { tabcontent[i].style.display = 'none'; } const tablinks = document.getElementsByClassName('tablinks'); for (let i = 0; i < tablinks.length; i++) { tablinks[i].className = tablinks[i].className.replace(' active', ''); } document.getElementById(tabName).style.display = 'block'; evt.currentTarget.className += ' active'; }
+
 document.getElementById("defaultOpen").click();
 
-// Equipment and exercise dropdown population
-const exercises = {
-  gym: ['Barbell', 'Dumbbell', 'Cable'],
-  home: ['Bodyweight', 'Resistance Band']
-};
+// Equipment and exercise dropdown population const exercises = { gym: ['Barbell', 'Dumbbell', 'Cable'], home: ['Bodyweight', 'Resistance Band'] };
 
-const exerciseOptions = {
-  Barbell: ['Squat', 'Bench Press', 'Deadlift'],
-  Dumbbell: ['Curl', 'Press'],
-  Cable: ['Lat Pulldown', 'Triceps Pushdown'],
-  Bodyweight: ['Push-up', 'Pull-up'],
-  'Resistance Band': ['Band Squat', 'Band Row']
-};
+const exerciseOptions = { Barbell: ['Squat', 'Bench Press', 'Deadlift'], Dumbbell: ['Curl', 'Press'], Cable: ['Lat Pulldown', 'Triceps Pushdown'], Bodyweight: ['Push-up', 'Pull-up'], 'Resistance Band': ['Band Squat', 'Band Row'] };
 
-// Populate the equipment dropdown based on location
-function populateEquipmentDropdown() {
-  const location = document.getElementById('location').value;
-  const equipmentDropdown = document.getElementById('equipmentDropdown');
-  equipmentDropdown.innerHTML = '';
-  
-  // Validate if location is selected
-  if (location) {
-    exercises[location].forEach(equipment => {
-      const option = document.createElement('option');
-      option.value = equipment;
-      option.text = equipment;
-      equipmentDropdown.appendChild(option);
-    });
-    populateExerciseDropdown();  // Update exercise dropdown
-  } else {
-    alert('Please select a location');
-  }
-}
+function populateEquipmentDropdown() { const location = document.getElementById('location').value; const equipmentDropdown = document.getElementById('equipmentDropdown'); equipmentDropdown.innerHTML = ''; exercises[location].forEach(equipment => { const option = document.createElement('option'); option.value = equipment; option.text = equipment; equipmentDropdown.appendChild(option); }); populateExerciseDropdown(); }
 
-// Populate the exercise dropdown based on selected equipment
-function populateExerciseDropdown() {
-  const equipment = document.getElementById('equipmentDropdown').value;
-  const exerciseDropdown = document.getElementById('exerciseDropdown');
-  exerciseDropdown.innerHTML = '';
+function populateExerciseDropdown() { const equipment = document.getElementById('equipmentDropdown').value; const exerciseDropdown = document.getElementById('exerciseDropdown'); exerciseDropdown.innerHTML = ''; (exerciseOptions[equipment] || []).forEach(exercise => { const option = document.createElement('option'); option.value = exercise; option.text = exercise; exerciseDropdown.appendChild(option); }); }
 
-  // Validate if equipment is selected
-  if (equipment && exerciseOptions[equipment]) {
-    exerciseOptions[equipment].forEach(exercise => {
-      const option = document.createElement('option');
-      option.value = exercise;
-      option.text = exercise;
-      exerciseDropdown.appendChild(option);
-    });
-  } else {
-    alert('Please select a valid equipment');
-  }
-}
+function addCustomExercise() { const custom = document.getElementById('customExerciseInput').value.trim(); if (custom) { const option = document.createElement('option'); option.value = custom; option.text = custom; document.getElementById('exerciseDropdown').appendChild(option); document.getElementById('customExerciseInput').value = ''; } }
 
-// Add a custom exercise to the exercise dropdown
-function addCustomExercise() {
-  const custom = document.getElementById('customExerciseInput').value.trim();
-  if (custom) {
-    const option = document.createElement('option');
-    option.value = custom;
-    option.text = custom;
-    document.getElementById('exerciseDropdown').appendChild(option);
-    document.getElementById('customExerciseInput').value = '';  // Clear the input field
-  }
-}
+// Save workout log function saveData() { const equipment = document.getElementById('equipmentDropdown').value; const exerciseDropdown = document.getElementById('exerciseDropdown'); if (!exerciseDropdown || !exerciseDropdown.value) { alert('Please select an exercise.'); return; }
 
-// Save workout log into the appropriate table and graph
-function saveData() {
-  const equipment = document.getElementById('equipmentDropdown').value;
-  const exercise = document.getElementById('exerciseDropdown').value;
-  const weight = document.querySelector('.exercise-weight').value;
-  const focus = document.getElementById('focus').value;
+const exercise = exerciseDropdown.value; const weight = document.querySelector('.exercise-weight').value; const focus = document.getElementById('focus').value;
 
-  // Validate all required fields
-  if (!equipment || !exercise || !weight || !focus) {
-    alert('Please fill in all fields');
-    return;
-  }
+if (!focus) { alert('Please select a focus area (Upper or Lower body).'); return; }
 
-  const tableId = focus === 'Upper' ? 'upperBodyTable' : 'lowerBodyTable';
-  const table = document.getElementById(tableId).querySelector('tbody');
-  const row = document.createElement('tr');
+const tableId = focus === 'Upper' ? 'upperBodyTable' : 'lowerBodyTable'; const table = document.getElementById(tableId).querySelector('tbody'); const row = document.createElement('tr');
 
-  row.innerHTML = `
-    <td>${equipment}</td>
-    <td>${exercise}</td>
-    <td><input type="number" placeholder="Sets"></td>
-    <td><input type="number" placeholder="Reps"></td>
-    <td>${weight} kg</td>
-    <td><button onclick="this.closest('tr').remove()">Clear</button></td>
-  `;
+row.innerHTML = <td>${equipment}</td> <td>${exercise}</td> <td><input type="number" placeholder="Sets"></td> <td><input type="number" placeholder="Reps"></td> <td>${weight} kg</td> <td><button onclick="this.closest('tr').remove()">Clear</button></td>;
 
-  table.appendChild(row);
-  document.querySelector('.exercise-weight').value = '';  // Clear weight input
+table.appendChild(row); document.querySelector('.exercise-weight').value = '';
 
-  // Add to weight data
-  addWeightEntry(exercise, weight);
-}
+// Save to graph tracking if exercise exists const today = new Date().toISOString().split('T')[0]; const exerciseLogs = JSON.parse(localStorage.getItem('exerciseLogs') || '{}'); if (!exerciseLogs[exercise]) exerciseLogs[exercise] = []; exerciseLogs[exercise].push({ date: today, weight: parseFloat(weight) }); localStorage.setItem('exerciseLogs', JSON.stringify(exerciseLogs)); }
 
-// Rest Timer Logic
-function startRestTimer() {
-  const input = prompt("Enter rest time in seconds:");
-  const duration = parseInt(input);
+// Rest Timer function startRestTimer() { const input = prompt("Enter rest time in seconds:"); const duration = parseInt(input); if (!isNaN(duration) && duration > 0) { let remaining = duration; const timerDisplay = document.getElementById('restTimer'); const interval = setInterval(() => { timerDisplay.textContent = Rest: ${remaining}s; remaining--; if (remaining < 0) { clearInterval(interval); timerDisplay.textContent = 'Rest: Done!'; } }, 1000); } else { alert("Please enter a valid number."); } }
 
-  // Prevent submitting invalid rest time
-  if (isNaN(duration) || duration <= 0) {
-    alert("Please enter a valid rest time greater than 0.");
-    return;
-  }
+// Weight Tracker Logic let weightData = JSON.parse(localStorage.getItem('weightData')) || []; const weightList = document.getElementById('weightList'); const weightChartCtx = document.getElementById('weightChart').getContext('2d');
 
-  let remaining = duration;
-  const timerDisplay = document.getElementById('restTimer');
-  const interval = setInterval(() => {
-    timerDisplay.textContent = `Rest: ${remaining}s`;
-    remaining--;
-    if (remaining < 0) {
-      clearInterval(interval);
-      timerDisplay.textContent = 'Rest: Done!';
-    }
-  }, 1000);
-}
+function renderWeightEntries() { weightList.innerHTML = ''; weightData.forEach((entry, index) => { const card = document.createElement('div'); card.className = 'card'; card.innerHTML = <div class="flex-space-between"> <div><strong>${entry.weight} kg</strong> - ${entry.date} ${entry.time}</div> <div> <button onclick="editEntry(${index})">Edit</button> <button onclick="deleteEntry(${index})">Delete</button> </div> </div>; weightList.appendChild(card); }); updateChart(); }
 
-// Weight Tracker Logic
-let weightData = JSON.parse(localStorage.getItem('weightData')) || [];
-const weightList = document.getElementById('weightList');
-const weightChartCtx = document.getElementById('weightChart').getContext('2d');
+function addWeightEntry() { const weight = document.getElementById('weightInput').value; const date = document.getElementById('dateInput').value; const time = document.getElementById('timeInput').value; if (weight && date && time) { weightData.push({ weight, date, time }); localStorage.setItem('weightData', JSON.stringify(weightData)); renderWeightEntries(); document.getElementById('weightInput').value = ''; document.getElementById('dateInput').value = ''; document.getElementById('timeInput').value = ''; } else { alert('Please fill in all fields'); } }
 
-// Render weight entries on the page
-function renderWeightEntries() {
-  weightList.innerHTML = '';
-  weightData.forEach((entry, index) => {
-    const card = document.createElement('div');
-    card.className = 'card';
-    card.innerHTML = `
-      <div class="flex-space-between">
-        <div>
-          <strong>${entry.weight} kg</strong> - ${entry.date} ${entry.time}
-        </div>
-        <div>
-          <button onclick="editEntry(${index})">Edit</button>
-          <button onclick="deleteEntry(${index})">Delete</button>
-        </div>
-      </div>
-    `;
-    weightList.appendChild(card);
-  });
-  updateChart();  // Update the chart with the latest data
-}
+function editEntry(index) { const entry = weightData[index]; const newWeight = prompt('Edit weight (kg):', entry.weight); const newDate = prompt('Edit date (YYYY-MM-DD):', entry.date); const newTime = prompt('Edit time (HH:MM):', entry.time); if (newWeight && newDate && newTime) { weightData[index] = { weight: newWeight, date: newDate, time: newTime }; localStorage.setItem('weightData', JSON.stringify(weightData)); renderWeightEntries(); } }
 
-// Add a new weight entry
-function addWeightEntry(exercise, weight) {
-  const date = new Date();
-  const formattedDate = date.toISOString().split('T')[0];
-  const time = date.toTimeString().split(' ')[0];
+function deleteEntry(index) { if (confirm('Are you sure you want to delete this entry?')) { weightData.splice(index, 1); localStorage.setItem('weightData', JSON.stringify(weightData)); renderWeightEntries(); } }
 
-  weightData.push({ exercise, weight, date: formattedDate, time });
-  localStorage.setItem('weightData', JSON.stringify(weightData));
-  renderWeightEntries();
-  updateChart();  // Update the chart after adding new data
-}
+function updateChart() { if (window.weightChartInstance) { window.weightChartInstance.destroy(); } const labels = weightData.map(e => ${e.date} ${e.time}); const data = weightData.map(e => parseFloat(e.weight));
 
-// Edit an existing weight entry
-function editEntry(index) {
-  const entry = weightData[index];
-  const newWeight = prompt('Edit weight (kg):', entry.weight);
-  const newDate = prompt('Edit date (YYYY-MM-DD):', entry.date);
-  const newTime = prompt('Edit time (HH:MM):', entry.time);
-  
-  // Validate if edited values are valid
-  if (newWeight && newDate && newTime) {
-    weightData[index] = { exercise: entry.exercise, weight: newWeight, date: newDate, time: newTime };
-    localStorage.setItem('weightData', JSON.stringify(weightData));
-    renderWeightEntries();
-  }
-}
+window.weightChartInstance = new Chart(weightChartCtx, { type: 'line', data: { labels, datasets: [{ label: 'Weight Progress (kg)', data, borderColor: 'orange', backgroundColor: 'rgba(255,165,0,0.2)', tension: 0.3 }] }, options: { responsive: true, scales: { y: { beginAtZero: false } } } }); }
 
-// Delete an existing weight entry
-function deleteEntry(index) {
-  if (confirm('Are you sure you want to delete this entry?')) {
-    weightData.splice(index, 1);
-    localStorage.setItem('weightData', JSON.stringify(weightData));
-    renderWeightEntries();
-  }
-}
+// Search by Exercise and Draw Graph function searchExerciseGraph() { const searchTerm = document.getElementById('searchExercise').value.trim(); if (!searchTerm) return;
 
-// Search for exercises and filter the data to show on the graph
-function searchExercise() {
-  const searchTerm = document.getElementById('searchExercise').value.toLowerCase();
-  const filteredData = weightData.filter(entry => entry.exercise.toLowerCase().includes(searchTerm));
-  updateChart(filteredData);  // Update the chart with filtered data
-}
+const logs = JSON.parse(localStorage.getItem('exerciseLogs') || '{}'); const data = logs[searchTerm] || [];
 
-// Update the chart with the latest data
-function updateChart(filteredData = weightData) {
-  if (window.weightChartInstance) {
-    window.weightChartInstance.destroy();  // Destroy previous chart instance if it exists
-  }
-  
-  const labels = filteredData.map(e => `${e.date} ${e.time}`);
-  const data = filteredData.map(e => parseFloat(e.weight));
+const ctx = document.getElementById('exerciseChart').getContext('2d'); if (window.exerciseChartInstance) window.exerciseChartInstance.destroy();
 
-  window.weightChartInstance = new Chart(weightChartCtx, {
-    type: 'line',
-    data: {
-      labels,
-      datasets: [{
-        label: 'Weight Progress (kg)',
-        data,
-        borderColor: 'orange',
-        backgroundColor: 'rgba(255,165,0,0.2)',
-        tension: 0.3
-      }]
-    },
-    options: {
-      responsive: true,
-      scales: {
-        y: {
-          beginAtZero: false
-        }
-      }
-    }
-  });
-}
+window.exerciseChartInstance = new Chart(ctx, { type: 'bar', data: { labels: data.map(e => e.date), datasets: [{ label: ${searchTerm} Weight (kg), data: data.map(e => e.weight), backgroundColor: 'orange', borderColor: 'black', borderWidth: 1 }] }, options: { scales: { y: { beginAtZero: true } } } });
 
-// Initialize weight entries and render the chart
+// Render bars under graph const history = document.getElementById('exerciseHistory'); history.innerHTML = ''; data.forEach(entry => { const item = document.createElement('li'); item.textContent = ${entry.date}: ${entry.weight} kg; history.appendChild(item); }); }
+
 renderWeightEntries();
 
-// Event listener to initialize weight chart when the page loads
-window.onload = function() {
-  renderWeightEntries();
-};
-
-// Form Validation for weight entry form
-document.getElementById('submitWeightForm').addEventListener('submit', function(event) {
-  event.preventDefault();
-  const weightInput = document.getElementById('weightInput').value;
-  const dateInput = document.getElementById('dateInput').value;
-  const timeInput = document.getElementById('timeInput').value;
-
-  if (!weightInput || !dateInput || !timeInput) {
-    alert('Please fill in all fields');
-    return;
-  }
-
-  // If valid, submit weight data
-  addWeightEntry(exercise, weightInput);
-  updateChart();
-  clearForm();
-});
-
-// Clear the weight input form
-function clearForm() {
-  document.getElementById('weightInput').value = '';
-  document.getElementById('dateInput').value = '';
-  document.getElementById('timeInput').value = '';
-}
-
-// Search bar and filtering functionality
-document.getElementById('searchExercise').addEventListener('input', function(event) {
-  searchExercise();
-});
