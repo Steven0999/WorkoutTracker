@@ -1,297 +1,68 @@
-/* Base Styles */
 body {
   background-color: grey;
   color: orange;
   font-family: Arial, sans-serif;
-  margin: 0;
-  padding: 0;
 }
 
-header {
-  background-color: black;
-  padding: 20px;
-  text-align: center;
-  border-bottom: 2px solid orange;
-}
-
-h1, h2, h3 {
-  margin: 0;
-  padding: 10px;
-}
-
-input, select, button {
-  font-family: Arial, sans-serif;
-}
-
-/* Tabs */
 .tab {
   overflow: hidden;
-  background-color: #333;
-  border-bottom: 2px solid orange;
+  background-color: #f1f1f1;
 }
 
 .tab button {
   background-color: inherit;
   float: left;
   border: none;
-  outline: none;
-  color: orange;
-  padding: 14px 16px;
-  transition: 0.3s;
-  font-size: 17px;
   cursor: pointer;
-}
-
-.tab button:hover {
-  background-color: #555;
-}
-
-.tab button.active {
-  background-color: orange;
-  color: black;
+  padding: 14px 16px;
 }
 
 .tabcontent {
   display: none;
   padding: 20px;
-  animation: fadeEffect 0.5s;
 }
 
 .tabcontent.active {
   display: block;
 }
 
-/* Form Inputs */
-.input-container {
-  margin: 20px 0;
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-  max-width: 600px;
-}
-
-input[type="number"],
-input[type="text"],
-select {
-  padding: 8px;
-  border: 1px solid orange;
-  border-radius: 4px;
-  background-color: #222;
-  color: orange;
-}
-
-button {
-  background-color: orange;
-  color: black;
-  border: none;
-  padding: 10px;
-  border-radius: 5px;
-  cursor: pointer;
-}
-
-button:hover {
-  background-color: darkorange;
-}
-
-button:disabled {
-  background-color: #999;
-  cursor: not-allowed;
-}
-
-/* Table Styles */
 table {
   width: 100%;
-  border-collapse: collapse;
-  margin-top: 20px;
   background-color: black;
   color: orange;
 }
 
 th, td {
-  border: 1px solid #555;
-  text-align: left;
   padding: 10px;
+  text-align: left;
 }
 
-th {
-  background-color: #444;
+.submit-button,
+.clear-button {
+  padding: 6px 10px;
+  background-color: white;
+  border-radius: 4px;
 }
 
-td input {
-  width: 90%;
-  padding: 5px;
-  background-color: #111;
-  color: orange;
+#restTimer {
+  font-weight: bold;
+  margin-top: 10px;
 }
 
-/* Weight Chart & Graphs */
-#weightChart {
-  background-color: #222;
-  padding: 20px;
-  border-radius: 10px;
-  margin-top: 20px;
-  width: 100%;
-  height: 400px;
+.weight-entry-form {
+  margin: 20px 0;
 }
 
-/* Cards for Weight Entries */
 .card {
-  background-color: #1e1e1e;
-  padding: 15px;
-  border-radius: 8px;
-  margin: 10px 0;
-  border-left: 5px solid orange;
+  background-color: black;
+  padding: 10px;
+  margin-bottom: 10px;
+  color: orange;
+  border-radius: 6px;
 }
 
 .flex-space-between {
   display: flex;
   justify-content: space-between;
   align-items: center;
-}
-
-/* Dark Mode */
-body.dark-mode {
-  background-color: #121212;
-  color: #f9a825;
-}
-
-body.dark-mode .tab {
-  background-color: #1e1e1e;
-}
-
-body.dark-mode table,
-body.dark-mode .card {
-  background-color: #2e2e2e;
-  color: #f9a825;
-}
-
-body.dark-mode input,
-body.dark-mode select {
-  background-color: #333;
-  color: #f9a825;
-}
-
-/* Rest Timer */
-#restTimer {
-  font-size: 20px;
-  font-weight: bold;
-  margin-top: 10px;
-}
-
-/* Footer */
-footer {
-  margin-top: 40px;
-  padding: 20px;
-  background-color: black;
-  text-align: center;
-  color: orange;
-}
-
-footer a {
-  color: orange;
-  text-decoration: underline;
-  margin: 0 5px;
-}
-
-/* Utility Classes */
-.text-center {
-  text-align: center;
-}
-
-.hidden {
-  display: none;
-}
-
-.btn-secondary {
-  background-color: white;
-  color: black;
-  border: 1px solid black;
-}
-
-.btn-secondary:hover {
-  background-color: #ddd;
-}
-
-/* Animations */
-@keyframes fadeEffect {
-  from { opacity: 0; }
-  to { opacity: 1; }
-}
-
-/* Responsive */
-@media screen and (max-width: 768px) {
-  .input-container {
-    width: 100%;
-  }
-
-  table, th, td {
-    font-size: 14px;
-  }
-
-  .tab button {
-    font-size: 14px;
-    padding: 10px;
-  }
-}
-
-/* History Styles */
-#historyList {
-  margin-top: 20px;
-  list-style-type: none;
-  padding-left: 0;
-}
-
-#historyList li {
-  padding: 8px 0;
-  border-bottom: 1px solid #444;
-}
-
-/* Chart Search Input */
-#searchExercise {
-  padding: 10px;
-  width: 100%;
-  margin-bottom: 15px;
-  background-color: #222;
-  color: orange;
-  border: 1px solid orange;
-  border-radius: 5px;
-}
-
-/* Graph section */
-#graphSection {
-  margin-top: 20px;
-}
-
-/* Weight Entry Cards */
-#weightListSection {
-  margin-top: 30px;
-}
-
-/* Prevent layout breakage */
-canvas {
-  max-width: 100%;
-}
-
-/* Just to reach 200+ lines with consistent formatting */
-.card button {
-  margin-left: 5px;
-}
-
-#weightInput,
-#dateInput,
-#timeInput {
-  margin: 5px 0;
-}
-
-label {
-  font-weight: bold;
-}
-
-.dark-mode .tab button.active {
-  background-color: #f9a825;
-  color: black;
-}
-
-.dark-mode .tab button:hover {
-  background-color: #333;
 }
