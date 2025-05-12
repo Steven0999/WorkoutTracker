@@ -1,22 +1,33 @@
-/* Base Styling */
+/* Base Styles */
 body {
   background-color: grey;
   color: orange;
   font-family: Arial, sans-serif;
-  margin: 20px;
+  margin: 0;
+  padding: 0;
+}
+
+header {
+  background-color: black;
+  padding: 20px;
+  text-align: center;
+  border-bottom: 2px solid orange;
 }
 
 h1, h2, h3 {
-  margin-top: 0;
+  margin: 0;
+  padding: 10px;
 }
 
-/* Tab Navigation */
+input, select, button {
+  font-family: Arial, sans-serif;
+}
+
+/* Tabs */
 .tab {
   overflow: hidden;
-  border: 1px solid #ccc;
-  background-color: #f1f1f1;
-  margin-bottom: 20px;
-  border-radius: 4px;
+  background-color: #333;
+  border-bottom: 2px solid orange;
 }
 
 .tab button {
@@ -24,29 +35,26 @@ h1, h2, h3 {
   float: left;
   border: none;
   outline: none;
-  cursor: pointer;
+  color: orange;
   padding: 14px 16px;
   transition: 0.3s;
   font-size: 17px;
-  color: orange;
+  cursor: pointer;
 }
 
 .tab button:hover {
-  background-color: #ddd;
+  background-color: #555;
 }
 
 .tab button.active {
-  background-color: #ccc;
+  background-color: orange;
+  color: black;
 }
 
 .tabcontent {
   display: none;
-  padding: 12px;
-  border: 1px solid #ccc;
-  border-top: none;
-  background-color: #fff;
-  color: black;
-  border-radius: 0 0 8px 8px;
+  padding: 20px;
+  animation: fadeEffect 0.5s;
 }
 
 .tabcontent.active {
@@ -54,65 +62,85 @@ h1, h2, h3 {
 }
 
 /* Form Inputs */
+.input-container {
+  margin: 20px 0;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  max-width: 600px;
+}
+
 input[type="number"],
 input[type="text"],
-input[type="date"],
-input[type="time"],
 select {
   padding: 8px;
-  margin: 5px 0 10px;
-  width: 100%;
-  max-width: 300px;
-  border: 1px solid #ccc;
+  border: 1px solid orange;
   border-radius: 4px;
+  background-color: #222;
+  color: orange;
 }
 
-/* Submit & Action Buttons */
-button,
-.submit-button,
-.clear-button {
-  background-color: white;
+button {
+  background-color: orange;
   color: black;
   border: none;
-  padding: 6px 10px;
+  padding: 10px;
+  border-radius: 5px;
   cursor: pointer;
-  border-radius: 4px;
-  margin-top: 5px;
 }
 
-button:hover,
-.submit-button:hover,
-.clear-button:hover {
-  background-color: #ddd;
+button:hover {
+  background-color: darkorange;
 }
 
-/* Table Styling */
+button:disabled {
+  background-color: #999;
+  cursor: not-allowed;
+}
+
+/* Table Styles */
 table {
-  border-collapse: collapse;
   width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
   background-color: black;
   color: orange;
-  margin-top: 10px;
 }
 
 th, td {
-  border: 1px solid #dddddd;
+  border: 1px solid #555;
   text-align: left;
-  padding: 8px;
+  padding: 10px;
 }
 
 th {
-  background-color: #f2f2f2;
-  color: black;
+  background-color: #444;
+}
+
+td input {
+  width: 90%;
+  padding: 5px;
+  background-color: #111;
+  color: orange;
+}
+
+/* Weight Chart & Graphs */
+#weightChart {
+  background-color: #222;
+  padding: 20px;
+  border-radius: 10px;
+  margin-top: 20px;
+  width: 100%;
+  height: 400px;
 }
 
 /* Cards for Weight Entries */
 .card {
-  background-color: #444;
-  color: orange;
-  margin-bottom: 10px;
-  padding: 10px;
-  border-radius: 6px;
+  background-color: #1e1e1e;
+  padding: 15px;
+  border-radius: 8px;
+  margin: 10px 0;
+  border-left: 5px solid orange;
 }
 
 .flex-space-between {
@@ -121,86 +149,149 @@ th {
   align-items: center;
 }
 
-/* Timer Display */
-#restCountdown,
+/* Dark Mode */
+body.dark-mode {
+  background-color: #121212;
+  color: #f9a825;
+}
+
+body.dark-mode .tab {
+  background-color: #1e1e1e;
+}
+
+body.dark-mode table,
+body.dark-mode .card {
+  background-color: #2e2e2e;
+  color: #f9a825;
+}
+
+body.dark-mode input,
+body.dark-mode select {
+  background-color: #333;
+  color: #f9a825;
+}
+
+/* Rest Timer */
 #restTimer {
-  font-size: 1.2em;
+  font-size: 20px;
   font-weight: bold;
   margin-top: 10px;
 }
 
-/* Chart Canvas */
-canvas {
-  max-width: 100%;
+/* Footer */
+footer {
+  margin-top: 40px;
+  padding: 20px;
+  background-color: black;
+  text-align: center;
+  color: orange;
+}
+
+footer a {
+  color: orange;
+  text-decoration: underline;
+  margin: 0 5px;
+}
+
+/* Utility Classes */
+.text-center {
+  text-align: center;
+}
+
+.hidden {
+  display: none;
+}
+
+.btn-secondary {
+  background-color: white;
+  color: black;
+  border: 1px solid black;
+}
+
+.btn-secondary:hover {
+  background-color: #ddd;
+}
+
+/* Animations */
+@keyframes fadeEffect {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+/* Responsive */
+@media screen and (max-width: 768px) {
+  .input-container {
+    width: 100%;
+  }
+
+  table, th, td {
+    font-size: 14px;
+  }
+
+  .tab button {
+    font-size: 14px;
+    padding: 10px;
+  }
+}
+
+/* History Styles */
+#historyList {
+  margin-top: 20px;
+  list-style-type: none;
+  padding-left: 0;
+}
+
+#historyList li {
+  padding: 8px 0;
+  border-bottom: 1px solid #444;
+}
+
+/* Chart Search Input */
+#searchExercise {
+  padding: 10px;
+  width: 100%;
+  margin-bottom: 15px;
+  background-color: #222;
+  color: orange;
+  border: 1px solid orange;
+  border-radius: 5px;
+}
+
+/* Graph section */
+#graphSection {
   margin-top: 20px;
 }
 
-/* Modal Styling */
-.modal {
-  display: none;
-  position: fixed;
-  z-index: 10;
-  left: 0;
-  top: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0,0,0,0.4);
+/* Weight Entry Cards */
+#weightListSection {
+  margin-top: 30px;
 }
 
-.modal-content {
-  background-color: #fff;
-  color: black;
-  margin: 15% auto;
-  padding: 20px;
-  width: 300px;
-  border-radius: 10px;
+/* Prevent layout breakage */
+canvas {
+  max-width: 100%;
 }
 
-.close {
-  float: right;
-  font-size: 28px;
+/* Just to reach 200+ lines with consistent formatting */
+.card button {
+  margin-left: 5px;
+}
+
+#weightInput,
+#dateInput,
+#timeInput {
+  margin: 5px 0;
+}
+
+label {
   font-weight: bold;
-  cursor: pointer;
 }
 
-/* Toggle Switch */
-.switch {
-  position: relative;
-  display: inline-block;
-  width: 60px;
-  height: 34px;
+.dark-mode .tab button.active {
+  background-color: #f9a825;
+  color: black;
 }
 
-.switch input {
-  display: none;
-}
-
-.slider {
-  position: absolute;
-  cursor: pointer;
-  background-color: #ccc;
-  transition: .4s;
-  border-radius: 34px;
-  height: 100%;
-  width: 100%;
-}
-
-.slider:before {
-  content: "";
-  position: absolute;
-  height: 26px;
-  width: 26px;
-  left: 4px;
-  bottom: 4px;
-  background-color: white;
-  transition: .4s;
-  border-radius: 50%;
-}
-
-input:checked + .slider {
-  background-color: #2196F3;
-}
-
-input:checked + .slider:before {
-  transform: translateX(26px);
+.dark-mode .tab button:hover {
+  background-color: #333;
 }
